@@ -3,6 +3,7 @@ import numpy as np
 cimport numpy as np
 import cython
 
+
 @cython.cdivision(True)
 def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
            np.ndarray[np.double_t, ndim=1] widths, int n_gen,
