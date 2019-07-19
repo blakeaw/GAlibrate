@@ -2,13 +2,14 @@ import numpy as np
 #import pandas as pd
 
 _run_gao_import = False
-
+# Try the numba version of run_gao
 try:
     from . import run_gao_numba as run_gao
     _run_gao_import = True
     print("------Running GAO with numba optimization.------")
 except ImportError:
-    pass
+    _run_gao_import = False
+# Numba didn't work, so try the Cython version
 if not _run_gao_import:
     try:
         import pyximport; pyximport.install(language_level=3)
@@ -16,10 +17,11 @@ if not _run_gao_import:
         _run_gao_import = True
         print("------Running GAO with Cython optimization.------")
     except ImportError:
-        pass
-else:
+        _run_gao_import = False
+#Numba nor Cython worked, so fallback to the pure Python version
+if not _run_gao_import:
     from . import run_gao_py as run_gao
-
+    _run_gao_import = True
 
 class GAO(object):
     """A continuous Genetic Algorithm-based Optimizer.
@@ -69,13 +71,13 @@ class GAO(object):
             during the search and the corresponding fitness value:
             (theta, fitness)
         """
-        sp_locs = np.array([sampled_parameter.loc for sampled_parameter in sampled_parameters])
-        sp_widths = np.array([sampled_parameter.width for sampled_parameter in sampled_parameters])
+        sp_locs = np.array([sampled_parameter.loc for sampled_parameter in self.sampled_parameters])
+        sp_widths = np.array([sampled_parameter.width for sampled_parameter in self.sampled_parameters])
         last_gen_chromosomes = run_gao.run_gao(self.population_size, self._n_sp,
                                                sp_locs, sp_widths,
                                                self.generations, self.mutation_rate,
                                                self.fitness_function)
-        fitnesses = np.array([self.fitness_function(chromosome) for chromosome in chromosomes])
+        fitnesses = np.array([self.fitness_function(chromosome) for chromosome in last_gen_chromosomes])
         fittest_idx = np.argmax(fitnesses)
         fittest_chromosome = last_gen_chromosomes[fittest_idx]
         fittest_fitness = fitnesses[fittest_idx]
