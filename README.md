@@ -3,6 +3,7 @@
 ![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
 ![version](https://img.shields.io/badge/version-0.1.0-orange.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/app/blakeaw1102/GAlibrate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 
 GAlibrate is a python toolkit that provides an easy to use interface for model calibration/parameter estimation using an implementation of continuous genetic algorithm-based optimization.
 
