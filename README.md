@@ -52,13 +52,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 # Documentation and Usage
 
+### Quick Overview
 Principally, **GAlibrate** defines the GAO (continuous **G**enetic **A**lgorithm-based **O**ptimizer ) class,
 ```python
 from galibrate import GAO
 ```
-which defines an object that can be used setup and run a continuous genetic algorithm-based optimization of a user-defined fitness function of a given set of (model) parameters.  
+which defines an object that can be used setup and run a continuous genetic algorithm-based optimization (i.e., a maximization) of a user-defined fitness function over the search space of a given set of (model) parameters.  
 
-
+### Examples
 Checkout the [examples](./examples) to see example scripts that show how to
 setup and launch Genetic Algorithm runs using GAlibrate.
 
