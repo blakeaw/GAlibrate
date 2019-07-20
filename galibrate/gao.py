@@ -40,6 +40,10 @@ class GAO(object):
         mutation_rate (float, optional): Sets the probability (i.e., on [0:1])
             that genes within new chromosomes (i.e., parameters within new
             candidate paramter vectors) undergo mutation. Default: 0.1)
+            
+    References:
+        1. Carr, Jenna. "An Introduction to Genetic Algorithms." (2014).
+            https://www.whitman.edu/Documents/Academics/Mathematics/2014/carrjk.pdf
     """
 
     def __init__(self, sampled_parameters, fitness_function, population_size,
