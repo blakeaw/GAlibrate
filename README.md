@@ -1,6 +1,6 @@
 # GAlibrate
 
-![Python version badge](https://img.shields.io/badge/python-3.6-blue.svg)
+![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
 ![version](https://img.shields.io/badge/version-0.1.0-orange.svg)
 
@@ -16,7 +16,7 @@ GAlibrate's API was designed to be familiar to users of [PyDREAM](https://github
 | :--- |
 |  GAlibrate is still under heavy development and may rapidly change. |
 
-GAlibrate installs as the `galibrate` package. It is compatible (i.e., tested) with Python 3.6.
+GAlibrate installs as the `galibrate` package. It is compatible (i.e., tested) with Python 3.6 and 3.7.
 
 Note that `galibrate` has the following core dependencies:
    * [NumPy](http://www.numpy.org/)
@@ -47,6 +47,20 @@ GAlibrate also includes an implementation of the core genetic algorithm that tak
 # License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+------
+
+# Documentation and Usage
+
+Principally, **GAlibrate** defines the GAO (continuous **G**enetic **A**lgorithm-based **O**ptimizer ) class,
+```python
+from galibrate import GAO
+```
+which defines an object that can be used setup and run a continuous genetic algorithm-based optimization of a user-defined fitness function of a given set of (model) parameters.  
+
+
+Checkout the [examples](./examples) to see example scripts that show how to
+setup and launch Genetic Algorithm runs using GAlibrate.
 
 ------
 
