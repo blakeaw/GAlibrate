@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 #import pandas as pd
 
@@ -6,7 +7,7 @@ _run_gao_import = False
 try:
     from . import run_gao_numba as run_gao
     _run_gao_import = True
-    print("------Running GAO with numba optimization.------")
+    warnings.warn("------Running GAO with numba optimization.------", RuntimeWarning)
 except ImportError:
     _run_gao_import = False
 # Numba didn't work, so try the Cython version
@@ -15,7 +16,7 @@ if not _run_gao_import:
         import pyximport; pyximport.install(language_level=3)
         from . import run_gao_cython as run_gao
         _run_gao_import = True
-        print("------Running GAO with Cython optimization.------")
+        warnings.warn("------Running GAO with Cython optimization.------", RuntimeWarning)
     except ImportError:
         _run_gao_import = False
 #Numba nor Cython worked, so fallback to the pure Python version
@@ -40,7 +41,7 @@ class GAO(object):
         mutation_rate (float, optional): Sets the probability (i.e., on [0:1])
             that genes within new chromosomes (i.e., parameters within new
             candidate paramter vectors) undergo mutation. Default: 0.1)
-            
+
     References:
         1. Carr, Jenna. "An Introduction to Genetic Algorithms." (2014).
             https://www.whitman.edu/Documents/Academics/Mathematics/2014/carrjk.pdf
