@@ -14,10 +14,9 @@ import importlib
 import os.path
 try:
     import pysb
-    from pysb.simulator import ScipyOdeSimulator
 except ImportError:
     pass
-from scipy.stats import norm, uniform
+from scipy.stats import norm
 import numpy as np
 from galibrate.sampled_parameter import SampledParameter
 from galibrate import GAO
@@ -106,8 +105,8 @@ class GaoIt(object):
     def __getitem__(self, key):
         return self.parms[key]
 
-    def __setitem__(self, key, loc, width):
-        self.parms[key] = tuple((loc, width))
+    def __setitem__(self, key, loc_width):
+        self.parms[key] = loc_width
 
     def __delitem__(self, key):
         del self.parm[key]
@@ -123,7 +122,7 @@ class GaoIt(object):
         try:
             name = parm.name
             self.__delitem__(name)
-        except:
+        except TypeError:
             self.__delitem__(parm)
         return self
 
@@ -164,6 +163,7 @@ class GaoIt(object):
         for param in pysb_model.paramters:
             if param not in kinetic_params:
                 self.__call__(param)
+        return
 
     def add_by_name(self, pysb_model, name_or_list):
         if isinstance(name_or_list, (list, tuple)):
@@ -173,7 +173,8 @@ class GaoIt(object):
         else:
             for param in pysb_model.parameters:
                 if param.name == name_or_list:
-                    self.__call__(param)                                 
+                    self.__call__(param)
+        return
 
 class GAlibrateIt(object):
     """Create instances of GAO objects for PySB models.
