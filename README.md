@@ -2,12 +2,14 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.1.0-orange.svg)
+![version](https://img.shields.io/badge/version-0.2.0-orange.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/app/blakeaw1102/GAlibrate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 
-GAlibrate is a python toolkit that provides an easy to use interface for model calibration/parameter estimation using an implementation of continuous genetic algorithm-based optimization.
+GAlibrate is a python toolkit that provides an easy to use interface for model calibration/parameter estimation using an implementation of continuous genetic algorithm-based optimization. Its functionality and API were designed to be familiar to users of the [PyDREAM](https://github.com/LoLab-VU/PyDREAM), [SimplePSO](https://github.com/LoLab-VU/ParticleSwarmOptimization), and [Gleipnir](https://github.com/LoLab-VU/Gleipnir) packages.
 
-GAlibrate's API was designed to be familiar to users of [PyDREAM](https://github.com/LoLab-VU/PyDREAM), [SimplePSO](https://github.com/LoLab-VU/ParticleSwarmOptimization), and [Gleipnir](https://github.com/LoLab-VU/Gleipnir), which are primarily used for biological model calibration.
+Although GAlibrate provides a general framework for running continuous
+genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
+
 
 ------
 
@@ -43,6 +45,9 @@ GAlibrate includes an implementation of the core genetic algorithm that is writt
 #### Numba
 GAlibrate also includes an implementation of the core genetic algorithm that takes advantage of [Numba](https://numba.pydata.org/)-based JIT compilation and optimization to accelerate the algorithm. This version of genetic algorithm is used if Numba is installed.
 
+#### PySB
+[PySB](http://pysb.org/) is needed to run PySB models, and it is therfore needed if you want to use tools from the galibrate.pysb_utils package.
+
 ------
 
 # License
@@ -58,11 +63,22 @@ Principally, **GAlibrate** defines the GAO (continuous **G**enetic **A**lgorithm
 ```python
 from galibrate import GAO
 ```
-which defines an object that can be used setup and run a continuous genetic algorithm-based optimization (i.e., a maximization) of a user-defined fitness function over the search space of a given set of (model) parameters.  
+which defines an object that can be used setup and run a continuous genetic algorithm-based optimization (i.e., a maximization) of a user-defined fitness function over the search space of a given set of (model) parameters.
+
+Additionally, GAlibrate has a `pysb_utils` sub-package that provides the
+`galibrate_it` module, which defines the GaoIt and GAlibrateIt classes (importable from the pysb_utils package level),
+```python
+from galibrate.pysb_utils import GaoIt, GAlibrateIt
+```  
+which create objects that abstract away some of the effort to setup and generate GAO instances for PySB models; [examples/pysb_dimerization_model](./examples/pysb_dimerization_model) provides some
+examples for using GaoIt and GAlibrateIt objects. The `galibrate_it` module can also be called from the command line to generate a template run script for a PySB model,
+```python
+python -m galibrate.pysb_utils.galibrate_it pysb_model.py output_path
+```
+which users can then modify to fit their needs.
 
 ### Examples
-Checkout the [examples](./examples) to see example scripts that show how to
-setup and launch Genetic Algorithm runs using GAlibrate.
+Additional example scripts that show how to setup and launch Genetic Algorithm runs using GAlibrate can be found under [examples](./examples).
 
 ------
 
@@ -78,3 +94,13 @@ comments, suggestions, or feature requests for GAlibrate can also be submitted a
 # Citing
 
 If you use the GAlibrate software in your research, please cite the GitHub repo.
+
+Also, please cite the following references as appropriate for software used with/via GAlibrate:
+
+#### Packages from the SciPy ecosystem
+
+These include NumPy and SciPy for which references can be obtained from:
+https://www.scipy.org/citing.html
+
+#### PySB
+  1. Lopez, C. F., Muhlich, J. L., Bachman, J. A. & Sorger, P. K. Programming biological models in Python using PySB. Mol Syst Biol 9, (2013). doi:[10.1038/msb.2013.1](dx.doi.org/10.1038/msb.2013.1)
