@@ -2,7 +2,7 @@ from __future__ import print_function
 import numpy as np
 import numba
 
-
+#@numba.jit(nopython=False)
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
             mutation_rate, fitness_func):
 
@@ -15,13 +15,13 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
         i_n_new = int(pop_size/2)
         fitnesses_idxs = np.zeros((pop_size, 2), dtype=np.double)
-        for i_mp in range(pop_size):
-            fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
-            fitnesses_idxs[i_mp][1] = i_mp
+        fitnesses_idex = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
+
         # Selection
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
         survivors = fitnesses_idxs_sort[int(pop_size/2):]
         # Move over the survivors
+        #new_chromosome = _move_over_survivors(survivors, chromosomes, new_chromosome)
         for i_mp in range(int(pop_size/2)):
             new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
@@ -48,6 +48,14 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     return chromosomes
 
 @numba.njit(cache=True)
+def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
+    for i_mp in range(pop_size):
+        fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+        fitnesses_idxs[i_mp][1] = i_mp
+
+
+
+@numba.njit(cache=True)
 def random_population(pop_size, n_sp,
                       locs, widths):
     chromosomes = np.zeros((pop_size, n_sp))
@@ -66,6 +74,10 @@ def choose_mating_pairs(survivors, pop_size):
     pre_mating_pairs = np.random.choice(int(pop_size/2), size=(int(pop_size/4), 2), p=prob)
     mating_pairs = np.zeros((int(pop_size/4), 2), dtype=np.int)
 
+    return _set_mating_pairs(pop_size, mating_pairs, pre_mating_pairs, survivors)
+
+@numba.njit(cache=True)
+def _set_mating_pairs(pop_size, mating_pairs, pre_mating_pairs, survivors):
     e0 = 0
     e1 = 1
     for i_hps in range(int(pop_size/4)):
