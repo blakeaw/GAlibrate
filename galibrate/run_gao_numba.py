@@ -21,11 +21,12 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
         survivors = fitnesses_idxs_sort[int(pop_size/2):]
         # Move over the survivors
-        #new_chromosome = _move_over_survivors(survivors, chromosomes, new_chromosome)
-        for i_mp in range(int(pop_size/2)):
-            new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+        new_chromosome = _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
+        #for i_mp in range(int(pop_size/2)):
+        #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
+#        new_chromosome = _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
         for i_mp in range(int(pop_size/4)):
             i_mate1_idx = mating_pairs[i_mp][0]
             i_mate2_idx = mating_pairs[i_mp][1]
@@ -53,7 +54,29 @@ def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
         fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
         fitnesses_idxs[i_mp][1] = i_mp
 
+@numba.njit(cache=True)
+def _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome):
+    for i_mp in range(int(pop_size/2)):
+        new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+    return new_chromosome
 
+#@numba.njit(cache=True)
+#def _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome):
+#
+#    for i_mp in range(int(pop_size/4)):
+#        i_mate1_idx = mating_pairs[i_mp][0]
+#        i_mate2_idx = mating_pairs[i_mp][1]
+#        chromosome1 = chromosomes[i_mate1_idx,:]
+#        chromosome2 = chromosomes[i_mate2_idx,:]
+#        # Crossover and update the chromosomes
+#        children = crossover(chromosome1, chromosome2, n_sp)
+#        child1 = children[0,:]
+#        child2 = children[1, :]
+#        new_chromosome[i_n_new] = child1
+#        i_n_new = i_n_new + 1
+#        new_chromosome[i_n_new] = child2
+#        i_n_new = i_n_new + 1
+#    return new_chromosome
 
 @numba.njit(cache=True)
 def random_population(pop_size, n_sp,
