@@ -7,6 +7,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/app/blakeaw1102/GAlibrate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
 
+<p align="center">
+  <img width="100" height="100" src="./images/GAlibrate_logo.png">
+</p>
+
 GAlibrate is a python toolkit that provides an easy to use interface for model calibration/parameter estimation using an implementation of continuous genetic algorithm-based optimization. Its functionality and API were designed to be familiar to users of the [PyDREAM](https://github.com/LoLab-VU/PyDREAM), [SimplePSO](https://github.com/LoLab-VU/ParticleSwarmOptimization), and [Gleipnir](https://github.com/LoLab-VU/Gleipnir) packages.
 
 Although GAlibrate provides a general framework for running continuous
