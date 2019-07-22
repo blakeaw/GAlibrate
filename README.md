@@ -12,7 +12,6 @@ GAlibrate is a python toolkit that provides an easy to use interface for model c
 Although GAlibrate provides a general framework for running continuous
 genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
 
-
 ------
 
 # Install
@@ -35,7 +34,7 @@ pip install -e git+https://github.com/blakeaw/GAlibrate@v0.2.0#egg=galibrate
 However, this will not automatically install the core dependencies. You will have to do that separately:
 ```
 pip install numpy scipy
-``` 
+```
 
 ### Recommended additional software
 
@@ -95,7 +94,7 @@ comments, suggestions, or feature requests for GAlibrate can also be submitted a
 
 # Citing
 
-If you use the GAlibrate software in your research, please cite the GitHub repo.
+If you use the GAlibrate software in your research, please cite it. You can export the  GAlibrate citation in your preferred format from its [Zenodo DOI](https://doi.org/10.5281/zenodo.3345232) entry.
 
 Also, please cite the following references as appropriate for software used with/via GAlibrate:
 
