@@ -477,7 +477,7 @@ if __name__ == '__main__':
         name = parameter[0].name
         value = parameter[0].value
         prior_shape = 'uniform'
-        print("Will sample parameter {} with around {}".format(name, prior_shape, value))
+        print("Will sample parameter {} with around {}".format(name, value))
         if prior_shape == 'uniform':
             line = write_uniform_param(name, value)
             ps_name = line.split()[0]
