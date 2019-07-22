@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='galibrate',
-      version='0.1.0',
+      version='0.2.0',
       description='Python toolkit for continuous Genetic Algorithm optimization.',
       author='Blake A. Wilson',
       author_email='blakeaw1102@gmail.com',
