@@ -6,7 +6,7 @@ users can optionally set the loc and width of each parameter. GAlibrateIt is use
 generate an instance of the GAO object for a PySB. It automatically pulls out
 kinetic parameters, or can get the parameters from a GaoIt instance, and can
 automatically define a fitness function for the model and a given timeseries
-dataset. 
+dataset.
 
 """
 
@@ -146,6 +146,34 @@ class GaoIt(object):
     def sampled_parameters(self):
         return [SampledParameter(name, self.parm[name][0], self.parm[name][1]) for name in self.keys()]
 
+    def add_all_kinetic_params(self, pysb_model):
+        for rule in pysb_model.rules:
+            if rule.rate_forward:
+                 self.__call__(rule.rate_forward)
+            if rule.rate_reverse:
+                 self.__call__(rule.rate_reverse)
+        return
+
+    def add_all_nonkinetic_params(self, pysb_model):
+        kinetic_params = list()
+        for rule in pysb_model.rules:
+            if rule.rate_forward:
+                 kinetic_params.append(rule.rate_forward)
+            if rule.rate_reverse:
+                 kinetic_params.append(rule.rate_reverse)
+        for param in pysb_model.paramters:
+            if param not in kinetic_params:
+                self.__call__(param)
+
+    def add_by_name(self, pysb_model, name_or_list):
+        if isinstance(name_or_list, (list, tuple)):
+            for param in pysb_model.parameters:
+                if param.name in name_or_list:
+                    self.__call__(param)
+        else:
+            for param in pysb_model.parameters:
+                if param.name == name_or_list:
+                    self.__call__(param)                                 
 
 class GAlibrateIt(object):
     """Create instances of GAO objects for PySB models.
@@ -181,7 +209,7 @@ class GAlibrateIt(object):
     def __init__(self, model, observable_data, timespan,
                  solver=pysb.simulator.ScipyOdeSimulator,
                  solver_kwargs=None, gao_it=None):
-        """Inits the GaoIt."""
+        """Inits the GAlibrateIt."""
         if solver_kwargs is None:
             solver_kwargs = dict()
         self.model = model
