@@ -8,7 +8,7 @@
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
 
 <p align="center">
-  <img width="100" height="100" src="./images/GAlibrate_logo.png">
+  <img width="200" height="200" src="./images/GAlibrate_logo.png">
 </p>
 
 GAlibrate is a python toolkit that provides an easy to use interface for model calibration/parameter estimation using an implementation of continuous genetic algorithm-based optimization. Its functionality and API were designed to be familiar to users of the [PyDREAM](https://github.com/LoLab-VU/PyDREAM), [SimplePSO](https://github.com/LoLab-VU/ParticleSwarmOptimization), and [Gleipnir](https://github.com/LoLab-VU/Gleipnir) packages.
