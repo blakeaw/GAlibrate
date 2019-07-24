@@ -31,9 +31,10 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
             fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
 
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
-        for i_mp in range(pop_size):
-            fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
-            fitnesses_idxs[i_mp][1] = i_mp
+        _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
+        #for i_mp in range(pop_size):
+        #    fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+        #    fitnesses_idxs[i_mp][1] = i_mp
         # Selection
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
         survivors = fitnesses_idxs_sort[pop_size/2:]
@@ -64,6 +65,16 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
         _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef void _fill_fitness_idxs(int pop_size, double[:] fitnesses,
+                             double[:,:] fitnesses_idxs):
+    cdef int i_mp
+    for i_mp in range(pop_size):
+        fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+        fitnesses_idxs[i_mp][1] = i_mp
+    return
+
 def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array):
     for i in range(start, pop_size):
         fitness_array[i] = fitness_func(chromosomes[i])
@@ -75,6 +86,7 @@ def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array
 cdef void _copy_survivor_fitnesses(int pop_size, double[:,:] survivors,
                                    double[:] fitness_array):
     cdef int stop = int(pop_size/2)
+    cdef int i
     for i in range(0, stop):
         fitness_array[i] = survivors[i][0]
     return
