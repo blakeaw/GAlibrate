@@ -26,7 +26,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
             fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
 
         fitnesses_idxs = np.zeros((pop_size, 2), dtype=np.double)
-        fitnesses_idex = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
+        fitnesses_idxs = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
 
         # Selection
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
@@ -64,6 +64,7 @@ def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
     for i_mp in range(pop_size):
         fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
         fitnesses_idxs[i_mp][1] = i_mp
+    return fitnesses_idxs    
 
 @numba.njit(cache=True)
 def _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome):
