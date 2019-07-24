@@ -6,14 +6,25 @@ import numba
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
             mutation_rate, fitness_func):
 
+    #@numba.jit('float64(float64[:])', cache=True)
+    #def wrap_fitness_func(theta):
+    #    return fitness_func(theta)
     # Initialize
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros((pop_size, n_sp))
+    #fitnesses = np.zeros(pop_size)
+
     # Begin generating new generations
     for i_gen in range(n_gen):
-
-        fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
         i_n_new = int(pop_size/2)
+        #fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+        if i_gen == 0:
+            fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+            #fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, 0, fitnesses)
+        else:
+            #fitnesses = np.array([fitness_func(chromosome) for i in range(pop)])
+            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+
         fitnesses_idxs = np.zeros((pop_size, 2), dtype=np.double)
         fitnesses_idex = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
 
@@ -45,7 +56,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         # Mutation
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
-
+        fitnesses = _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes
 
 @numba.njit(cache=True)
@@ -59,6 +70,19 @@ def _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome):
     for i_mp in range(int(pop_size/2)):
         new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
     return new_chromosome
+
+#@numba.jit(forceobj=True)
+def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array):
+    for i in range(start, pop_size):
+        fitness_array[i] = fitness_func(chromosomes[i])
+    return fitness_array
+
+@numba.njit(cache=True)
+def _copy_survivor_fitnesses(pop_size, survivors, fitness_array):
+    stop = int(pop_size/2)
+    for i in range(0, stop):
+        fitness_array[i] = survivors[i][0]
+    return fitness_array
 
 #@numba.njit(cache=True)
 #def _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome):
