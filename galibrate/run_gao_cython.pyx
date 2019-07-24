@@ -23,10 +23,13 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
     # Begin generating new generations
     for i_gen in range(n_gen):
-
-        fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
-
         i_n_new = pop_size/2
+
+        if i_gen == 0:
+            fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+        else:
+            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
         for i_mp in range(pop_size):
             fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
@@ -58,8 +61,23 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
         # Mutation
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
-
+        _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes
+
+def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array):
+    for i in range(start, pop_size):
+        fitness_array[i] = fitness_func(chromosomes[i])
+    return fitness_array
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cdef void _copy_survivor_fitnesses(int pop_size, double[:,:] survivors,
+                                   double[:] fitness_array):
+    cdef int stop = int(pop_size/2)
+    for i in range(0, stop):
+        fitness_array[i] = survivors[i][0]
+    return
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
