@@ -37,20 +37,20 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
-#        new_chromosome = _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
-        for i_mp in range(int(pop_size/4)):
-            i_mate1_idx = mating_pairs[i_mp][0]
-            i_mate2_idx = mating_pairs[i_mp][1]
-            chromosome1 = chromosomes[i_mate1_idx,:]
-            chromosome2 = chromosomes[i_mate2_idx,:]
-            # Crossover and update the chromosomes
-            children = crossover(chromosome1, chromosome2, n_sp)
-            child1 = children[0,:]
-            child2 = children[1, :]
-            new_chromosome[i_n_new] = child1
-            i_n_new = i_n_new + 1
-            new_chromosome[i_n_new] = child2
-            i_n_new = i_n_new + 1
+        new_chromosome = _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
+#        for i_mp in range(int(pop_size/4)):
+#            i_mate1_idx = mating_pairs[i_mp][0]
+#            i_mate2_idx = mating_pairs[i_mp][1]
+#            chromosome1 = chromosomes[i_mate1_idx,:]
+#            chromosome2 = chromosomes[i_mate2_idx,:]
+#            # Crossover and update the chromosomes
+#            children = crossover(chromosome1, chromosome2, n_sp)
+#            child1 = children[0,:]
+#            child2 = children[1, :]
+#            new_chromosome[i_n_new] = child1
+#            i_n_new = i_n_new + 1
+#            new_chromosome[i_n_new] = child2
+#            i_n_new = i_n_new + 1
         # Replace the old population with the new one
         chromosomes = new_chromosome.copy()
         # Mutation
@@ -84,23 +84,23 @@ def _copy_survivor_fitnesses(pop_size, survivors, fitness_array):
         fitness_array[i] = survivors[i][0]
     return fitness_array
 
-#@numba.njit(cache=True)
-#def _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome):
-#
-#    for i_mp in range(int(pop_size/4)):
-#        i_mate1_idx = mating_pairs[i_mp][0]
-#        i_mate2_idx = mating_pairs[i_mp][1]
-#        chromosome1 = chromosomes[i_mate1_idx,:]
-#        chromosome2 = chromosomes[i_mate2_idx,:]
-#        # Crossover and update the chromosomes
-#        children = crossover(chromosome1, chromosome2, n_sp)
-#        child1 = children[0,:]
-#        child2 = children[1, :]
-#        new_chromosome[i_n_new] = child1
-#        i_n_new = i_n_new + 1
-#        new_chromosome[i_n_new] = child2
-#        i_n_new = i_n_new + 1
-#    return new_chromosome
+@numba.njit(cache=True)
+def _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome):
+
+    for i_mp in range(int(pop_size/4)):
+        i_mate1_idx = mating_pairs[i_mp][0]
+        i_mate2_idx = mating_pairs[i_mp][1]
+        chromosome1 = chromosomes[i_mate1_idx,:]
+        chromosome2 = chromosomes[i_mate2_idx,:]
+        # Crossover and update the chromosomes
+        children = crossover(chromosome1, chromosome2, n_sp)
+        child1 = children[0,:]
+        child2 = children[1, :]
+        new_chromosome[i_n_new] = child1
+        i_n_new = i_n_new + 1
+        new_chromosome[i_n_new] = child2
+        i_n_new = i_n_new + 1
+    return new_chromosome
 
 @numba.njit(cache=True)
 def random_population(pop_size, n_sp,
