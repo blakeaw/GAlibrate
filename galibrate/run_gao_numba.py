@@ -64,7 +64,7 @@ def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
     for i_mp in range(pop_size):
         fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
         fitnesses_idxs[i_mp][1] = i_mp
-    return fitnesses_idxs    
+    return fitnesses_idxs
 
 @numba.njit(cache=True)
 def _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome):
