@@ -39,8 +39,9 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
         survivors = fitnesses_idxs_sort[pop_size/2:]
         # Move over the survivors
-        for i_mp in range(pop_size/2):
-            new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+        _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
+        #for i_mp in range(pop_size/2):
+        #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
         for i_mp in range(pop_size/4):
@@ -73,6 +74,17 @@ cdef void _fill_fitness_idxs(int pop_size, double[:] fitnesses,
     for i_mp in range(pop_size):
         fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
         fitnesses_idxs[i_mp][1] = i_mp
+    return
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cdef void _move_over_survivors(int pop_size, double[:,:] survivors,
+                               double[:,:] chromosomes,
+                               double[:,:] new_chromosome):
+    cdef int i_mp
+    for i_mp in range(pop_size/2):
+        new_chromosome[i_mp] = chromosomes[<int>survivors[i_mp][1]][:]
     return
 
 def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array):
