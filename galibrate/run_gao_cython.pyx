@@ -23,43 +23,114 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
     # Begin generating new generations
     for i_gen in range(n_gen):
-
-        fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
-
         i_n_new = pop_size/2
+
+        if i_gen == 0:
+            fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+        else:
+            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
-        for i_mp in range(pop_size):
-            fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
-            fitnesses_idxs[i_mp][1] = i_mp
+        _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
+        #for i_mp in range(pop_size):
+        #    fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+        #    fitnesses_idxs[i_mp][1] = i_mp
         # Selection
         fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
         survivors = fitnesses_idxs_sort[pop_size/2:]
         # Move over the survivors
-        for i_mp in range(pop_size/2):
-            new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+        _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
+        #for i_mp in range(pop_size/2):
+        #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
-        for i_mp in range(pop_size/4):
-            i_mate1_idx = mating_pairs[i_mp][0]
-            i_mate2_idx = mating_pairs[i_mp][1]
-            chromosome1 = chromosomes[i_mate1_idx,:]
-            chromosome2 = chromosomes[i_mate2_idx,:]
-            # Crossover and update the chromosomes
-            children = crossover(chromosome1, chromosome2, n_sp)
-            child1 = children[0,:]
-            child2 = children[1, :]
-            new_chromosome[i_n_new] = child1
-            i_n_new = i_n_new + 1
-            new_chromosome[i_n_new] = child2
-            i_n_new = i_n_new + 1
+        _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
+#        for i_mp in range(pop_size/4):
+#            i_mate1_idx = mating_pairs[i_mp][0]
+#            i_mate2_idx = mating_pairs[i_mp][1]
+#            chromosome1 = chromosomes[i_mate1_idx,:]
+#            chromosome2 = chromosomes[i_mate2_idx,:]
+#            # Crossover and update the chromosomes
+#            children = crossover(chromosome1, chromosome2, n_sp)
+#            child1 = children[0,:]
+#            child2 = children[1, :]
+#            new_chromosome[i_n_new] = child1
+#            i_n_new = i_n_new + 1
+#            new_chromosome[i_n_new] = child2
+#            i_n_new = i_n_new + 1
         # Replace the old population with the new one
         #chromosomes = new_chromosome.copy()
         double_deepcopy_2d(chromosomes, new_chromosome, pop_size, n_sp)
         # Mutation
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
-
+        _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef void _fill_fitness_idxs(int pop_size, double[:] fitnesses,
+                             double[:,:] fitnesses_idxs):
+    cdef Py_ssize_t i_mp
+    for i_mp in range(pop_size):
+        fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+        fitnesses_idxs[i_mp][1] = i_mp
+    return
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cdef void _move_over_survivors(int pop_size, double[:,:] survivors,
+                               double[:,:] chromosomes,
+                               double[:,:] new_chromosome):
+    cdef Py_ssize_t i_mp
+    for i_mp in range(pop_size/2):
+        new_chromosome[i_mp] = chromosomes[<int>survivors[i_mp][1]][:]
+    return
+
+def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array):
+    for i in range(start, pop_size):
+        fitness_array[i] = fitness_func(chromosomes[i])
+    return fitness_array
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cdef void _copy_survivor_fitnesses(int pop_size, double[:,:] survivors,
+                                   double[:] fitness_array):
+    cdef int stop = pop_size/2
+    cdef Py_ssize_t i
+    for i in range(0, stop):
+        fitness_array[i] = survivors[i][0]
+    return
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cdef void _generate_children(int pop_size, int n_sp, int i_n_new,
+                             long[:,:] mating_pairs, double[:,:] chromosomes,
+                             double[:,:] new_chromosome):
+    cdef Py_ssize_t i_mp, i_mate1_idx, i_mate2_idx
+    cdef double[:] chromosome1
+    cdef double[:] chromosome2
+    cdef double[:] child1
+    cdef double[:] child2
+    cdef double[:,:] children
+
+    for i_mp in range(pop_size/4):
+        i_mate1_idx = mating_pairs[i_mp][0]
+        i_mate2_idx = mating_pairs[i_mp][1]
+        chromosome1 = chromosomes[i_mate1_idx,:]
+        chromosome2 = chromosomes[i_mate2_idx,:]
+        # Crossover and update the chromosomes
+        children = crossover(chromosome1, chromosome2, n_sp)
+        child1 = children[0,:]
+        child2 = children[1, :]
+        new_chromosome[i_n_new] = child1
+        i_n_new = i_n_new + 1
+        new_chromosome[i_n_new] = child2
+        i_n_new = i_n_new + 1
+    return
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
