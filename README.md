@@ -31,7 +31,7 @@ Note that `galibrate` has the following core dependencies:
    * [NumPy](http://www.numpy.org/)
    * [SciPy](https://www.scipy.org/)
 
-#### pip install
+### pip install
 You can install the latest release of the `galibrate` package using `pip` sourced from the GitHub repo:
 ```
 pip install -e git+https://github.com/blakeaw/GAlibrate@v0.4.0#egg=galibrate
@@ -40,7 +40,14 @@ However, this will not automatically install the core dependencies. You will hav
 ```
 pip install numpy scipy
 ```
-#### conda install
+
+`galibrate` can also be `pip` installed from PyPI,
+```
+pip install galibrate
+```
+but this version currently doesn't include the Cython accelerated version of the core GA algorithm.
+
+### conda install
 You can install the `galibrate` package from the `blakeaw` channel:
 ```
 conda install -c blakeaw galibrate
