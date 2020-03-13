@@ -1,10 +1,11 @@
 from __future__ import print_function
 import numpy as np
 import numba
+from .par_fitness_eval import par_fitness_eval
 
 #@numba.jit(nopython=False)
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
-            mutation_rate, fitness_func):
+            mutation_rate, fitness_func, nprocs):
 
     #@numba.jit('float64(float64[:])', cache=True)
     #def wrap_fitness_func(theta):
@@ -19,11 +20,18 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         i_n_new = int(pop_size/2)
         #fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
         if i_gen == 0:
-            fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+            if nprocs > 1:
+                fitnesses = par_fitness_eval(fitness_func, chromosomes, 0, nprocs)
+            else:
+                fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
             #fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, 0, fitnesses)
         else:
+            if nprocs > 1:
+                new_fitnesses = par_fitness_eval(fitness_func, chromosomes, i_n_new, nprocs)
+                fitnesses[i_n_new:] = new_fitnesses[:]
+            else:
             #fitnesses = np.array([fitness_func(chromosome) for i in range(pop)])
-            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+                fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
 
         fitnesses_idxs = np.zeros((pop_size, 2), dtype=np.double)
         fitnesses_idxs = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
