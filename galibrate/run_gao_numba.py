@@ -5,7 +5,7 @@ import numba
 #@numba.jit(nopython=False)
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
             mutation_rate, fitness_func):
-
+    print(numba.config.NUMBA_DEFAULT_NUM_THREADS)        
     #@numba.jit('float64(float64[:])', cache=True)
     #def wrap_fitness_func(theta):
     #    return fitness_func(theta)
