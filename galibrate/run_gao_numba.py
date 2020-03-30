@@ -5,7 +5,7 @@ import numba
 #@numba.jit(nopython=False)
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
             mutation_rate, fitness_func):
-    print(numba.config.NUMBA_DEFAULT_NUM_THREADS)        
+    print(numba.config.NUMBA_DEFAULT_NUM_THREADS)
     #@numba.jit('float64(float64[:])', cache=True)
     #def wrap_fitness_func(theta):
     #    return fitness_func(theta)
@@ -109,9 +109,11 @@ def random_population(pop_size, n_sp,
     chromosomes = np.zeros((pop_size, n_sp))
     u = np.random.random((pop_size, n_sp))
 
-    for i in range(pop_size):
-        for j in numba.prange(n_sp):
-            chromosomes[i][j] = locs[j] + u[i][j]*widths[j]
+    for ij in numba.prange(pop_size*n_sp):
+        #for j in range(n_sp):
+        i = int(ij/n_sp)
+        j = ij % n_sp
+        chromosomes[i][j] = locs[j] + u[i][j]*widths[j]
 
     return chromosomes
 
@@ -160,9 +162,9 @@ def mutation(chromosomes,
 
     half_pop_size = int(pop_size/2)
 
-    for i in range(half_pop_size, pop_size):
+    for i in numba.prange(half_pop_size, pop_size):
 
-        for j in numba.prange(n_sp):
+        for j in range(n_sp):
             u = np.random.random()
 
             if u < mutation_rate:
