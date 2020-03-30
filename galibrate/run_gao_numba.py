@@ -59,16 +59,16 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         fitnesses = _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
-    for i_mp in range(pop_size):
+    for i_mp in numba.prange(pop_size):
         fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
         fitnesses_idxs[i_mp][1] = i_mp
     return fitnesses_idxs
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome):
-    for i_mp in range(int(pop_size/2)):
+    for i_mp in numba.prange(int(pop_size/2)):
         new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
     return new_chromosome
 
@@ -78,10 +78,10 @@ def _compute_fitnesses(fitness_func, chromosomes, pop_size, start, fitness_array
         fitness_array[i] = fitness_func(chromosomes[i])
     return fitness_array
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def _copy_survivor_fitnesses(pop_size, survivors, fitness_array):
     stop = int(pop_size/2)
-    for i in range(0, stop):
+    for i in numba.prange(0, stop):
         fitness_array[i] = survivors[i][0]
     return fitness_array
 
@@ -103,14 +103,14 @@ def _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_c
         i_n_new = i_n_new + 1
     return new_chromosome
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def random_population(pop_size, n_sp,
                       locs, widths):
     chromosomes = np.zeros((pop_size, n_sp))
     u = np.random.random((pop_size, n_sp))
 
     for i in range(pop_size):
-        for j in range(n_sp):
+        for j in numba.prange(n_sp):
             chromosomes[i][j] = locs[j] + u[i][j]*widths[j]
 
     return chromosomes
@@ -124,11 +124,11 @@ def choose_mating_pairs(survivors, pop_size):
 
     return _set_mating_pairs(pop_size, mating_pairs, pre_mating_pairs, survivors)
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def _set_mating_pairs(pop_size, mating_pairs, pre_mating_pairs, survivors):
     e0 = 0
     e1 = 1
-    for i_hps in range(int(pop_size/4)):
+    for i_hps in numba.prange(int(pop_size/4)):
         mating_pairs[i_hps][e0] = int(survivors[pre_mating_pairs[i_hps][e0]][e1])
         mating_pairs[i_hps][e1] = int(survivors[pre_mating_pairs[i_hps][e1]][e1])
     return mating_pairs
@@ -151,7 +151,7 @@ def crossover(c1, c2, n_sp):
 
     return children
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, parallel=True)
 def mutation(chromosomes,
              locs,
              widths,
@@ -162,7 +162,7 @@ def mutation(chromosomes,
 
     for i in range(half_pop_size, pop_size):
 
-        for j in range(n_sp):
+        for j in numba.prange(n_sp):
             u = np.random.random()
 
             if u < mutation_rate:
