@@ -9,4 +9,5 @@ def par_fitness_eval(fitness_func, chromosomes, first_chromosome, nprocs):
     pool = mp.Pool(nprocs)
     fitnesses = pool.map(fitness_func, [chromosome for chromosome in eval_chromosomes])
     pool.close()
+    pool.join()
     return np.array(fitnesses)
