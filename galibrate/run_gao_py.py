@@ -1,6 +1,10 @@
 from __future__ import print_function
 import numpy as np
-
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(iterator, **kwargs):
+        return iterator
 
 
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
@@ -10,7 +14,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
     # Begin generating new generations
-    for i_gen in range(n_gen):
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
 
         fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
         i_n_new = int(pop_size/2)

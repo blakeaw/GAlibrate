@@ -1,6 +1,11 @@
 from __future__ import print_function
 import numpy as np
 import numba
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(iterator, **kwargs):
+        return iterator
 
 #@numba.jit(nopython=False)
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
@@ -15,7 +20,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     #fitnesses = np.zeros(pop_size)
 
     # Begin generating new generations
-    for i_gen in range(n_gen):
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
         i_n_new = int(pop_size/2)
         #fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
         if i_gen == 0:

@@ -1,5 +1,10 @@
 from __future__ import print_function
 import numpy as np
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(iterator, **kwargs):
+        return iterator
 cimport numpy as np
 import cython
 
@@ -22,7 +27,7 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
     cdef np.ndarray[np.double_t, ndim=2, mode='c'] chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
     # Begin generating new generations
-    for i_gen in range(n_gen):
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
         i_n_new = pop_size/2
 
         if i_gen == 0:
