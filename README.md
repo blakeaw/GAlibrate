@@ -2,8 +2,8 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.4.0-orange.svg)
-[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.4.0)
+![version](https://img.shields.io/badge/version-0.5.0-orange.svg)
+[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.5.0)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/app/blakeaw1102/GAlibrate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
@@ -17,13 +17,32 @@
 Although **GAlibrate** provides a general framework for running continuous
 genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
 
+## What's new in version 0.5.0
+
+ * Optional progress bar to monitor passage of generations during GAO run that is only displayed if [tqdm](https://github.com/tqdm/tqdm) is installed  
+ * Optional [multiprocessing](https://docs.python.org/2/library/multiprocessing.html) based parallelism when evaluating the fitness function over the population during a GAO run.  
+
+
+## Table of Contents
+
+ 1. [Install](#install)
+  1. [pip install](#pip-install)
+  2. [conda install](#conda-install)
+  3. [Recomended additional software](#recomended-additional-software)
+ 2. [License](#license)
+ 3. [Documentation and Usage](#documentation-and-usage)
+  1. [Quick Overview](#quick-overview)
+  2. [Examples](#examples)
+ 4. [Contact](#contact)
+ 5. [Citing](#citing)  
+
 ------
 
 # Install
 
-| **! Warning** |
+| **! Note** |
 | :--- |
-|  GAlibrate is still under heavy development and may rapidly change. |
+|  GAlibrate is still in version zero development so new versions may not be backwards compatible. |
 
 **GAlibrate** installs as the `galibrate` package. It is compatible (i.e., tested) with Python 3.6 and 3.7.
 
@@ -34,7 +53,7 @@ Note that `galibrate` has the following core dependencies:
 ### pip install
 You can install the latest release of the `galibrate` package using `pip` sourced from the GitHub repo:
 ```
-pip install -e git+https://github.com/blakeaw/GAlibrate@v0.4.0#egg=galibrate
+pip install -e git+https://github.com/blakeaw/GAlibrate@v0.5.0#egg=galibrate
 ```
 However, this will not automatically install the core dependencies. You will have to do that separately:
 ```
@@ -64,6 +83,9 @@ The following software is not required for the basic operation of **GAlibrate**,
 #### Numba
 **GAlibrate** also includes an implementation of the core genetic algorithm that takes advantage of [Numba](https://numba.pydata.org/)-based JIT compilation and optimization to accelerate the algorithm. This version of genetic algorithm is used if Numba is installed.
 
+#### tqdm
+GAO runs will display a progress bar that tracks the passage of generations when the [tqdm](https://github.com/tqdm/tqdm) package installed.  
+
 #### PySB
 [PySB](http://pysb.org/) is needed to run PySB models, and it is therfore needed if you want to use tools from the galibrate.pysb_utils package.
 
@@ -84,6 +106,13 @@ from galibrate import GAO
 ```
 which defines an object that can be used setup and run a continuous genetic algorithm-based optimization (i.e., a maximization) of a user-defined fitness function over the search space of a given set of (model) parameters.
 
+#### multiprocessing-based parallelism
+The multiprocessing-based parallelism (single node) can be invoked by passing the keyword argument `nprocs` with a value greater than one when calling the `GAO.run` function; for example, `gao.run(nprocs=2)` will use two processes.
+
+Parallelism is used when evaluating the fitness function across the population (whole population during initialization and half the population during subsequent generations). You can expect the most parallel speedup when the fitness function is expensive to evaluate, such as when evaluating a PySB model. You may also get speedup when the population is very large, depending on how expensive the fitness function is to evaluate. Note however, that if the fitness function is fast to evaluate then the parallel overhead may actually slow down the run.
+
+#### PySB models
+
 Additionally, **GAlibrate** has a `pysb_utils` sub-package that provides the
 `galibrate_it` module, which defines the GaoIt and GAlibrateIt classes (importable from the pysb_utils package level),
 ```python
@@ -97,7 +126,7 @@ python -m galibrate.pysb_utils.galibrate_it pysb_model.py output_path
 which users can then modify to fit their needs.
 
 ### Examples
-Additional example scripts that show how to setup and launch Genetic Algorithm runs using **GAlibrate** can be found under [examples](./examples).
+Additional example scripts that show how to setup and launch Genetic Algorithm runs using **GAlibrate** can be found under [examples](./examples).   
 
 ------
 
