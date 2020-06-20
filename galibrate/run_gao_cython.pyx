@@ -8,11 +8,12 @@ except ImportError:
 cimport numpy as np
 import cython
 
+from .par_fitness_eval import par_fitness_eval
 
 @cython.cdivision(True)
 def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
            np.ndarray[np.double_t, ndim=1] widths, int n_gen,
-            double mutation_rate, object fitness_func):
+            double mutation_rate, object fitness_func, int nprocs):
     cdef int i_gen, i_mp
     cdef int i_mate1_idx, i_mate2_idx
     cdef np.ndarray[np.double_t, ndim=1, mode='c'] fitnesses = np.zeros(pop_size, dtype=np.double)
@@ -26,14 +27,23 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
     # Initialize
     cdef np.ndarray[np.double_t, ndim=2, mode='c'] chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    if nprocs > 1:
+        def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
+            new_fitnesses = par_fitness_eval(fitness_func, chromosomes, i_n_new, nprocs)
+            fitnesses[i_n_new:] = new_fitnesses[:]
+            return fitnesses
+    else:
+        def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
+            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+            return fitnesses
     # Begin generating new generations
     for i_gen in tqdm(range(n_gen), desc='Generations: '):
         i_n_new = pop_size/2
 
         if i_gen == 0:
-            fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, 0, fitnesses, nprocs)
         else:
-            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs)
 
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
         _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
