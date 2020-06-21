@@ -1,18 +1,32 @@
 from __future__ import print_function
 import numpy as np
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(iterator, **kwargs):
+        return iterator
+
+from .par_fitness_eval import par_fitness_eval
 
 
 
 def run_gao(pop_size, n_sp, locs, widths, n_gen,
-            mutation_rate, fitness_func):
+            mutation_rate, fitness_func, nprocs):
 
     # Initialize
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    if nprocs > 1:
+        def evaluate_fitnesses(fitness_func, chromosomes, nprocs):
+            return  par_fitness_eval(fitness_func, chromosomes, 0, nprocs)
+    else:
+        def evaluate_fitnesses(fitness_func, chromosomes, nprocs):
+            return np.array([fitness_func(chromosome) for chromosome in chromosomes])
     # Begin generating new generations
-    for i_gen in range(n_gen):
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
 
-        fitnesses = np.array([fitness_func(chromosome) for chromosome in chromosomes])
+        fitnesses = evaluate_fitnesses(fitness_func, chromosomes, nprocs)
+
         i_n_new = int(pop_size/2)
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
         for i_mp in range(pop_size):

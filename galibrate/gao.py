@@ -1,6 +1,7 @@
 import warnings
 import numpy as np
 #import pandas as pd
+from .par_fitness_eval import par_fitness_eval
 
 _run_gao_import = False
 # Try the numba version of run_gao
@@ -68,7 +69,7 @@ class GAO(object):
 
         return
 
-    def run(self, verbose=False):
+    def run(self, verbose=False, nprocs=1):
         """Run the GAO.
         Returns:
             tuple of (numpy.ndarray, float): Tuple containing the
@@ -81,8 +82,12 @@ class GAO(object):
         last_gen_chromosomes = run_gao.run_gao(self.population_size, self._n_sp,
                                                sp_locs, sp_widths,
                                                self.generations, self.mutation_rate,
-                                               self.fitness_function)
-        fitnesses = np.array([self.fitness_function(chromosome) for chromosome in last_gen_chromosomes])
+                                               self.fitness_function, nprocs)
+
+        if nprocs > 1:
+            fitnesses = par_fitness_eval(self.fitness_function, last_gen_chromosomes, 0, nprocs)
+        else:
+            fitnesses = np.array([self.fitness_function(chromosome) for chromosome in last_gen_chromosomes])
         fittest_idx = np.argmax(fitnesses)
         fittest_chromosome = last_gen_chromosomes[fittest_idx]
         fittest_fitness = fitnesses[fittest_idx]
