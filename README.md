@@ -107,7 +107,7 @@ from galibrate import GAO
 which defines an object that can be used setup and run a continuous genetic algorithm-based optimization (i.e., a maximization) of a user-defined fitness function over the search space of a given set of (model) parameters.
 
 #### multiprocessing-based parallelism
-The multiprocessing-based parallelism (single node) can be invoked by passing the keyword argument `nprocs` with a value greater than one when calling the `GAO.run` function; for example, `gao.run(nprocs=2)` will use two processes.
+The multiprocessing-based parallelism (single node) can be invoked by passing the keyword argument `nprocs` with a value greater than one when calling the `GAO.run` function; for example, `gao.run(nprocs=2)` will use two processes. A full example is provided in [this script](./examples/pysb_dimerization_model/galibrate_dimerization_model_parallel.py).
 
 Parallelism is used when evaluating the fitness function across the population (whole population during initialization and half the population during subsequent generations). You can expect the most parallel speedup when the fitness function is expensive to evaluate, such as when evaluating a PySB model. You may also get speedup when the population is very large, depending on how expensive the fitness function is to evaluate. Note however, that if the fitness function is fast to evaluate then the parallel overhead may actually slow down the run.
 
