@@ -17,7 +17,7 @@
 Although **GAlibrate** provides a general framework for running continuous
 genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
 
-## What's new in version 0.5.0
+### What's new in version 0.5.0
 
  * Optional progress bar to monitor passage of generations during GAO run that is only displayed if [tqdm](https://github.com/tqdm/tqdm) is installed  
  * Optional [multiprocessing](https://docs.python.org/2/library/multiprocessing.html) based parallelism when evaluating the fitness function over the population during a GAO run.  
@@ -26,13 +26,13 @@ genetic algorithm-based optimizations, it was created with systems biology model
 ## Table of Contents
 
  1. [Install](#install)
-  1. [pip install](#pip-install)
-  2. [conda install](#conda-install)
-  3. [Recomended additional software](#recomended-additional-software)
+     1. [pip install](#pip-install)
+     2. [conda install](#conda-install)
+     3. [Recomended additional software](#recomended-additional-software)
  2. [License](#license)
  3. [Documentation and Usage](#documentation-and-usage)
-  1. [Quick Overview](#quick-overview)
-  2. [Examples](#examples)
+     1. [Quick Overview](#quick-overview)
+     2. [Examples](#examples)
  4. [Contact](#contact)
  5. [Citing](#citing)  
 
