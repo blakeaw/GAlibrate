@@ -16,6 +16,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     # Initialize
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    best_fitness_per_generation = np.zeros(n_gen+1)
     if nprocs > 1:
         def evaluate_fitnesses(fitness_func, chromosomes, nprocs):
             return  par_fitness_eval(fitness_func, chromosomes, 0, nprocs)
@@ -33,7 +34,9 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
             fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
             fitnesses_idxs[i_mp][1] = i_mp
         # Selection
-        fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
+        ind = np.argsort(fitnesses_idxs[:,0])
+        fitnesses_idxs_sort = fitnesses_idxs[ind]
+        best_fitness_per_generation[i_gen] = fitnesses_idxs_sort[-1,0]
         survivors = fitnesses_idxs_sort[int(pop_size/2):]
         # Move over the survivors
         for i_mp in range(int(pop_size/2)):
@@ -59,7 +62,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
 
-    return chromosomes
+    return chromosomes, best_fitness_per_generation
 
 def random_population(pop_size, n_sp,
                       locs, widths):

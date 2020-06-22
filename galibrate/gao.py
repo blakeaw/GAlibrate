@@ -57,6 +57,9 @@ class GAO(object):
         if population_size < 4:
             population_size = 4
         self.population_size = int(population_size/4.) * 4
+        if self.population_size != population_size:
+            warn_string = "--Population size was adjusted from {} to {} to make it a multiple of four--".format(population_size, self.population_size)
+            warnings.warn(warn_string)
         self.generations = generations
         self.mutation_rate = mutation_rate
         #self.survival_rate = survival_rate
@@ -66,6 +69,7 @@ class GAO(object):
         self._last_generation = None
         self._fittest_chromosome = None
         self._fittest_fitness = None
+        self._best_fitness_per_generation = None
 
         return
 
@@ -79,7 +83,7 @@ class GAO(object):
         """
         sp_locs = np.array([sampled_parameter.loc for sampled_parameter in self.sampled_parameters])
         sp_widths = np.array([sampled_parameter.width for sampled_parameter in self.sampled_parameters])
-        last_gen_chromosomes = run_gao.run_gao(self.population_size, self._n_sp,
+        last_gen_chromosomes, best_fitness_per_generation = run_gao.run_gao(self.population_size, self._n_sp,
                                                sp_locs, sp_widths,
                                                self.generations, self.mutation_rate,
                                                self.fitness_function, nprocs)
@@ -93,4 +97,14 @@ class GAO(object):
         fittest_fitness = fitnesses[fittest_idx]
         self._fittest_chromosome = fittest_chromosome
         self._fittest_fitness = fittest_fitness
+        best_fitness_per_generation[-1] = fittest_fitness
+        self._best_fitness_per_generation = best_fitness_per_generation
         return fittest_chromosome, fittest_fitness
+
+    @property
+    def best(self):
+        return self._fittest_chromosome, self._fittest_fitness
+
+    @property
+    def best_fitness_per_generation(self):
+        return self._best_fitness_per_generation

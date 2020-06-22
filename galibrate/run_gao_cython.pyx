@@ -27,6 +27,7 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
     # Initialize
     cdef np.ndarray[np.double_t, ndim=2, mode='c'] chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    best_fitness_per_generation = np.zeros(n_gen+1, dtype=np.double)
     if nprocs > 1:
         def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
             new_fitnesses = par_fitness_eval(fitness_func, chromosomes, i_n_new, nprocs)
@@ -47,32 +48,17 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
 
         fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
         _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
-        #for i_mp in range(pop_size):
-        #    fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
-        #    fitnesses_idxs[i_mp][1] = i_mp
+
         # Selection
-        fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
+        ind = np.argsort(fitnesses_idxs[:,0])
+        fitnesses_idxs_sort = fitnesses_idxs[ind]
+        best_fitness_per_generation[i_gen] = fitnesses_idxs_sort[-1,0]
         survivors = fitnesses_idxs_sort[pop_size/2:]
         # Move over the survivors
         _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
-        #for i_mp in range(pop_size/2):
-        #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
         _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
-#        for i_mp in range(pop_size/4):
-#            i_mate1_idx = mating_pairs[i_mp][0]
-#            i_mate2_idx = mating_pairs[i_mp][1]
-#            chromosome1 = chromosomes[i_mate1_idx,:]
-#            chromosome2 = chromosomes[i_mate2_idx,:]
-#            # Crossover and update the chromosomes
-#            children = crossover(chromosome1, chromosome2, n_sp)
-#            child1 = children[0,:]
-#            child2 = children[1, :]
-#            new_chromosome[i_n_new] = child1
-#            i_n_new = i_n_new + 1
-#            new_chromosome[i_n_new] = child2
-#            i_n_new = i_n_new + 1
         # Replace the old population with the new one
         #chromosomes = new_chromosome.copy()
         double_deepcopy_2d(chromosomes, new_chromosome, pop_size, n_sp)
@@ -80,7 +66,7 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
         _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
-    return chromosomes
+    return chromosomes, best_fitness_per_generation
 
 @cython.boundscheck(False)
 @cython.wraparound(False)

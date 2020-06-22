@@ -19,6 +19,7 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     # Initialize
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros((pop_size, n_sp))
+    best_fitness_per_generation = np.zeros(n_gen+1)
     if nprocs > 1:
         def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
             new_fitnesses = par_fitness_eval(fitness_func, chromosomes, i_n_new, nprocs)
@@ -36,42 +37,30 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
             fitnesses = np.zeros(pop_size)
             fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, 0, fitnesses, nprocs)
         else:
-            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs)
+            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, 0, fitnesses, nprocs)
 
 
         fitnesses_idxs = np.zeros((pop_size, 2), dtype=np.double)
         fitnesses_idxs = _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
 
         # Selection
-        fitnesses_idxs_sort = np.sort(fitnesses_idxs, axis=0)
+        ind = np.argsort(fitnesses_idxs[:,0])
+        fitnesses_idxs_sort = fitnesses_idxs[ind]
+        best_fitness_per_generation[i_gen] = fitnesses_idxs_sort[-1,0]
         survivors = fitnesses_idxs_sort[int(pop_size/2):]
         # Move over the survivors
         new_chromosome = _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
-        #for i_mp in range(int(pop_size/2)):
-        #    new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+        # Choose the mating pairs
         mating_pairs = choose_mating_pairs(survivors, pop_size)
         # Generate children
         new_chromosome = _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
-#        for i_mp in range(int(pop_size/4)):
-#            i_mate1_idx = mating_pairs[i_mp][0]
-#            i_mate2_idx = mating_pairs[i_mp][1]
-#            chromosome1 = chromosomes[i_mate1_idx,:]
-#            chromosome2 = chromosomes[i_mate2_idx,:]
-#            # Crossover and update the chromosomes
-#            children = crossover(chromosome1, chromosome2, n_sp)
-#            child1 = children[0,:]
-#            child2 = children[1, :]
-#            new_chromosome[i_n_new] = child1
-#            i_n_new = i_n_new + 1
-#            new_chromosome[i_n_new] = child2
-#            i_n_new = i_n_new + 1
         # Replace the old population with the new one
         chromosomes = new_chromosome.copy()
         # Mutation
         if i_gen < (n_gen-1):
             mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
         fitnesses = _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
-    return chromosomes
+    return chromosomes, best_fitness_per_generation
 
 @numba.njit(cache=True)
 def _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs):
@@ -152,7 +141,6 @@ def crossover(c1, c2, n_sp):
 
     crossover_point = int(n_sp * np.random.random())
     crossover_beta = np.random.random()
-    #cdef np.ndarray[np.double_t, ndim=2] children = np.zeros([2, n_sp], dtype=np.double)
     children = np.zeros((2, n_sp), dtype=np.double)
     x1 = c1[crossover_point]
     x2 = c2[crossover_point]

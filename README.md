@@ -2,8 +2,8 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.5.0-orange.svg)
-[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.5.0)
+![version](https://img.shields.io/badge/version-0.6.0-orange.svg)
+[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.6.0)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/app/blakeaw1102/GAlibrate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
@@ -17,11 +17,15 @@
 Although **GAlibrate** provides a general framework for running continuous
 genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
 
-### What's new in version 0.5.0
+### What's new in
 
+#### version 0.6.0
+ * core GA now returns an array with fitness value of the fittest individual from each generation which can be accessed from the GAO property `GAO.best_fitness_per_generation`.
+ * Bug fix in core GA for sorting the population before selection and mating.
+
+#### version 0.5.0
  * Optional progress bar to monitor passage of generations during GAO run that is only displayed if [tqdm](https://github.com/tqdm/tqdm) is installed  
  * Optional [multiprocessing](https://docs.python.org/2/library/multiprocessing.html) based parallelism when evaluating the fitness function over the population during a GAO run.  
-
 
 ## Table of Contents
 
@@ -30,11 +34,12 @@ genetic algorithm-based optimizations, it was created with systems biology model
      2. [conda install](#conda-install)
      3. [Recomended additional software](#recomended-additional-software)
  2. [License](#license)
- 3. [Documentation and Usage](#documentation-and-usage)
+ 3. [Change Log](#change-log)
+ 4. [Documentation and Usage](#documentation-and-usage)
      1. [Quick Overview](#quick-overview)
      2. [Examples](#examples)
- 4. [Contact](#contact)
- 5. [Citing](#citing)  
+ 5. [Contact](#contact)
+ 6. [Citing](#citing)  
 
 ------
 
@@ -53,7 +58,7 @@ Note that `galibrate` has the following core dependencies:
 ### pip install
 You can install the latest release of the `galibrate` package using `pip` sourced from the GitHub repo:
 ```
-pip install -e git+https://github.com/blakeaw/GAlibrate@v0.5.0#egg=galibrate
+pip install -e git+https://github.com/blakeaw/GAlibrate@v0.6.0#egg=galibrate
 ```
 However, this will not automatically install the core dependencies. You will have to do that separately:
 ```
@@ -94,6 +99,12 @@ GAO runs will display a progress bar that tracks the passage of generations when
 # License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+------
+
+# Change Log
+
+See: [CHANGELOG](CHANGELOG.md)
 
 ------
 
