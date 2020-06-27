@@ -3,7 +3,7 @@ layout: page
 title: GAlibrate
 subtitle: "Parameter estimation and model calibration using Genetic Algorithm optimization in Python"
 use-site-title: true
-gh-repo: "https://github.com/blakeaw/GAlibrate"
+gh-repo: "blakeaw/GAlibrate"
 gh-badge: "star"                
 ---
 
