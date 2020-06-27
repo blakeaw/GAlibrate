@@ -1,1 +1,6 @@
 theme: jekyll-theme-slate
+
+# List of links in the navigation bar
+navbar-links:
+  Home: "index"
+  Examples: "examples"
