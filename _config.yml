@@ -1,6 +1,1 @@
-theme: jekyll-theme-slate
-
-# List of links in the navigation bar
-navbar-links:
-  Home: "index"
-  Examples: "examples"
+remote_theme: daattali/beautiful-jekyll 
