@@ -6,7 +6,7 @@ remote_theme: daattali/beautiful-jekyll
 title: GAlibrate
 
 # Short description of your site
-description: GAlibrate
+description: Project page for GAlibrate software
 
 # Your name to show in the footer
 author: blakeaw
@@ -14,6 +14,7 @@ author: blakeaw
 # --- List of links in the navigation bar --- #
 
 navbar-links:
+  Home: "index"      
   Examples: "examples"
 
 
@@ -21,14 +22,14 @@ navbar-links:
 
 # Image to show in the navigation bar - works best with a square image
 # Remove this parameter if you don't want an image in the navbar
-avatar: "/images/GAlibrate_logo.png"
+#avatar: "/images/GAlibrate_logo.png"
 
 # By default, the image is cut into a circle. You can disable this behaviour by setting 'round-avatar: false'
-round-avatar: true
+#round-avatar: true
 
 # If you want to have an image logo in the top-left corner instead of the title text,
 # then specify the following parameter
-#title-img: /path/to/image
+title-img: "/images/GAlibrate_logo.png"
 
 
 # --- Footer options --- #
@@ -81,7 +82,7 @@ excerpt_length: 50
 
 # Personalize the colors in your website. Colour values can be any valid CSS colour
 
-navbar-col: "#F5F5F5"
+navbar-col: "#FF8C00"
 navbar-text-col: "#404040"
 navbar-border-col: "#EAEAEA"
 page-col: "#FFFFFF"
