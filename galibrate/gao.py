@@ -150,3 +150,11 @@ class GAO(object):
     @property
     def total_generations(self):
         return self._total_generations
+
+    @property
+    def final_population(self):
+        return self._last_generation
+
+    @property
+    def final_population_fitness(self):
+        return self._last_generation_fitnesses        
