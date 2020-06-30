@@ -67,9 +67,11 @@ class GAO(object):
         self._n_sp = len(sampled_parameters)
         self._pop_idxs = np.array(list(range(self.population_size)))
         self._last_generation = None
+        self._last_generation_fitnesses = None
         self._fittest_chromosome = None
         self._fittest_fitness = None
         self._best_fitness_per_generation = None
+        self._total_generations = 0
 
         return
 
@@ -92,6 +94,8 @@ class GAO(object):
             fitnesses = par_fitness_eval(self.fitness_function, last_gen_chromosomes, 0, nprocs)
         else:
             fitnesses = np.array([self.fitness_function(chromosome) for chromosome in last_gen_chromosomes])
+        self._last_generation = last_gen_chromosomes
+        self._last_generation_fitnesses = fitnesses
         fittest_idx = np.argmax(fitnesses)
         fittest_chromosome = last_gen_chromosomes[fittest_idx]
         fittest_fitness = fitnesses[fittest_idx]
@@ -99,6 +103,40 @@ class GAO(object):
         self._fittest_fitness = fittest_fitness
         best_fitness_per_generation[-1] = fittest_fitness
         self._best_fitness_per_generation = best_fitness_per_generation
+        self._total_generations += self.generations
+        return fittest_chromosome, fittest_fitness
+
+    def continue_run(self, generations, verbose=False, nprocs=1):
+        """Continue the GAO for additional generations.
+        Returns:
+            tuple of (numpy.ndarray, float): Tuple containing the
+            vector of the parameter values with the highest fitness found
+            during the search and the corresponding fitness value:
+            (theta, fitness)
+        """
+        sp_locs = np.array([sampled_parameter.loc for sampled_parameter in self.sampled_parameters])
+        sp_widths = np.array([sampled_parameter.width for sampled_parameter in self.sampled_parameters])
+        last_gen_chromosomes, best_fitness_per_generation = run_gao.continue_gao(self.population_size, self._n_sp,
+                                               self._last_generation, self._last_generation_fitnesses, sp_locs,
+                                               sp_widths,
+                                               generations, self.mutation_rate,
+                                               self.fitness_function, nprocs)
+
+        if nprocs > 1:
+            fitnesses = par_fitness_eval(self.fitness_function, last_gen_chromosomes, 0, nprocs)
+        else:
+            fitnesses = np.array([self.fitness_function(chromosome) for chromosome in last_gen_chromosomes])
+        self._last_generation = last_gen_chromosomes
+        self._last_generation_fitnesses = fitnesses
+        fittest_idx = np.argmax(fitnesses)
+        fittest_chromosome = last_gen_chromosomes[fittest_idx]
+        fittest_fitness = fitnesses[fittest_idx]
+        self._fittest_chromosome = fittest_chromosome
+        self._fittest_fitness = fittest_fitness
+        best_fitness_per_generation[-1] = fittest_fitness
+        self._best_fitness_per_generation = np.concatenate((self._best_fitness_per_generation,
+                                                           best_fitness_per_generation))
+        self._total_generations += generations
         return fittest_chromosome, fittest_fitness
 
     @property
@@ -108,3 +146,7 @@ class GAO(object):
     @property
     def best_fitness_per_generation(self):
         return self._best_fitness_per_generation
+
+    @property
+    def total_generations(self):
+        return self._total_generations
