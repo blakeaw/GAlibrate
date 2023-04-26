@@ -26,6 +26,7 @@ def sphere(X: np.array) -> float:
     """
     return np.sum(X**2)
 
+
 def cigar(X: np.array) -> float:
     """Returns the value of an N-dimensional Cigar function.
     The cigar function is given by,
@@ -38,7 +39,7 @@ def cigar(X: np.array) -> float:
     Args:
         X: Input position vector.
     """
-    return X[0]**2 + 1e6*np.sum(X[1:]**2)
+    return X[0] ** 2 + 1e6 * np.sum(X[1:] ** 2)
 
 
 def rastrigin(X: np.array) -> float:
@@ -52,17 +53,20 @@ def rastrigin(X: np.array) -> float:
     """
     N = len(X)
     xsq = X**2
-    cos2pix = np.cos(2*np.pi*X)
-    return 10*N + np.sum(xsq - 10*cos2pix)
+    cos2pix = np.cos(2 * np.pi * X)
+    return 10 * N + np.sum(xsq - 10 * cos2pix)
 
-# Define the fitness function (minimize himmelblau function)
-# minima:
-# x1 = (3.0,2.0) and f(x1) = 0
-# x2 = (-2.805118,3.131312) and f(x2) = 0
-# x3 = (-3.779310,-3.283186) and f(x3) = 0
-# x4 = (3.584428,-1.848126) and f(x4) = 0
+
 def himmelblau(x_1: float, x_2: float) -> float:
     """Returns the value of the 2-dimensional Himmelblau function.
-
+    The 2D Himmelblau function is given by,
+        f(x_1, x_2) =  (x_1**2 + x_2 - 11)**2 + (x_1 + x_2**2 - 7)**2 ,
+    and is defined on range,
+        [-6, 6] ,
+    with four minima at,
+        X_1 = (3.0, 2.0), f(X_1) = 0
+        X_2 = (-2.805118, 3.131312), f(X_2) = 0
+        X_3 = (-3.779310, -3.283186), f(X_3) = 0
+        X_4 = (3.584428, -1.848126), f(X_4) = 0
     """
-    return (x_1**2 + x_2 - 11)**2 + (x_1 + x_2**2 - 7)**2
+    return (x_1**2 + x_2 - 11) ** 2 + (x_1 + x_2**2 - 7) ** 2
