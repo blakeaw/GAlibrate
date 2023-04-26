@@ -14,38 +14,38 @@ import numpy as np
 
 from galibrate.sampled_parameter import SampledParameter
 from galibrate import GAO
+from galibrate.benchmarks import cigar
 
 
 # Define the fitness function to minimize the 'cigar' objective function.
 # minimum is x=0 and f(x) = 0
-def cigar(position):
-    """N-dimensional Cigar function.
-    """
-    return position[0]**2 + 1e6*np.sum(position[1:]**2)
-
 def fitness(chromosome):
     return -cigar(chromosome)
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     # Set up the list of sampled parameters: the range is (-10:10)
-    n_params = 6
-    sampled_parameters = [SampledParameter(name=p, loc=-10.0,width=20.0) for p in range(n_params)]
+    n_params = 2
+    sampled_parameters = [
+        SampledParameter(name=p, loc=-10.0, width=20.0) for p in range(n_params)
+    ]
 
     # Set the active point population size
     population_size = 100
 
     # Construct the Genetic Algorithm-based Optimizer.
-    gao = GAO(sampled_parameters, fitness, population_size,
-              generations=50,
-              mutation_rate=0.1)
+    gao = GAO(
+        sampled_parameters, fitness, population_size, generations=50, mutation_rate=0.1
+    )
     # run it
     best_theta, best_theta_fitness = gao.run()
     # print the best theta.
-    print("Fittest theta {} with fitness value {} ".format(best_theta, best_theta_fitness))
+    print(
+        "Fittest theta {} with fitness value {} ".format(best_theta, best_theta_fitness)
+    )
     try:
         import matplotlib.pyplot as plt
+
         plt.plot(gao.best_fitness_per_generation)
         plt.show()
     except ImportError:
