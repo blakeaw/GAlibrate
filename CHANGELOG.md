@@ -14,6 +14,19 @@ N/A
 
 ### Fixed
 
+## [0.7.0] - 2023-04-27
+
+### Added
+ - New `benchmarks` module that defines functions often used to test and benchmark single-objective optimization applications.
+ - New examples for each of the functions defined in the `benchmarks` functions.
+ - 3-point line example.
+ - PySB double-enzymatic model example.
+ - Functions to resume/continue GAO runs for additional generations: `GAO.resume` and underlying functions `run_gao_py.continue_gao`, `run_gao_numba.continue_gao`, and `run_gao_cython.continue_gao`. 
+
+### Changed
+
+### Fixed
+
 ## [0.6.0] - 2020-06-21
 
 ### Added
