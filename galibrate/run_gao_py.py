@@ -64,6 +64,59 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
 
     return chromosomes, best_fitness_per_generation
 
+def continue_gao(pop_size, n_sp, chromosomes, fitnesses, locs, widths, n_gen,
+            mutation_rate, fitness_func, nprocs):
+
+    # Initialize
+    new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    best_fitness_per_generation = np.zeros(n_gen+1)
+    if nprocs > 1:
+        def evaluate_fitnesses(fitness_func, chromosomes, nprocs):
+            return  par_fitness_eval(fitness_func, chromosomes, 0, nprocs)
+    else:
+        def evaluate_fitnesses(fitness_func, chromosomes, nprocs):
+            return np.array([fitness_func(chromosome) for chromosome in chromosomes])
+    # Begin generating new generations
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
+        if i_gen > 0:
+            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, nprocs)
+
+        i_n_new = int(pop_size/2)
+        fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
+        for i_mp in range(pop_size):
+            fitnesses_idxs[i_mp][0] = fitnesses[i_mp]
+            fitnesses_idxs[i_mp][1] = i_mp
+        # Selection
+        ind = np.argsort(fitnesses_idxs[:,0])
+        fitnesses_idxs_sort = fitnesses_idxs[ind]
+        best_fitness_per_generation[i_gen] = fitnesses_idxs_sort[-1,0]
+        survivors = fitnesses_idxs_sort[int(pop_size/2):]
+        # Move over the survivors
+        for i_mp in range(int(pop_size/2)):
+            new_chromosome[i_mp] = chromosomes[int(survivors[i_mp][1])][:]
+        mating_pairs = choose_mating_pairs(survivors, pop_size)
+        # Generate children
+        for i_mp in range(int(pop_size/4)):
+            i_mate1_idx = mating_pairs[i_mp][0]
+            i_mate2_idx = mating_pairs[i_mp][1]
+            chromosome1 = chromosomes[i_mate1_idx,:]
+            chromosome2 = chromosomes[i_mate2_idx,:]
+            # Crossover and update the chromosomes
+            children = crossover(chromosome1, chromosome2, n_sp)
+            child1 = children[0,:]
+            child2 = children[1, :]
+            new_chromosome[i_n_new] = child1
+            i_n_new = i_n_new + 1
+            new_chromosome[i_n_new] = child2
+            i_n_new = i_n_new + 1
+        # Replace the old population with the new one
+        chromosomes = new_chromosome.copy()
+        # Mutation
+        if i_gen < (n_gen-1):
+            mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
+
+    return chromosomes, best_fitness_per_generation
+
 def random_population(pop_size, n_sp,
                       locs, widths):
     chromosomes = np.zeros([pop_size, n_sp], dtype=np.double)

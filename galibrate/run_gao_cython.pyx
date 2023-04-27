@@ -68,6 +68,63 @@ def run_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=1] locs,
         _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
     return chromosomes, best_fitness_per_generation
 
+@cython.cdivision(True)
+def continue_gao(int pop_size, int n_sp, np.ndarray[np.double_t, ndim=2] chromosomes,
+            np.ndarray[np.double_t, ndim=1] fitnesses, np.ndarray[np.double_t, ndim=1] locs,
+           np.ndarray[np.double_t, ndim=1] widths, int n_gen,
+            double mutation_rate, object fitness_func, int nprocs):
+    cdef int i_gen, i_mp
+    cdef int i_mate1_idx, i_mate2_idx
+    #cdef np.ndarray[np.double_t, ndim=1, mode='c'] fitnesses = np.zeros(pop_size, dtype=np.double)
+    cdef np.ndarray[np.double_t, ndim=2, mode='c'] new_chromosome
+    cdef int i_n_new
+    cdef np.ndarray[np.double_t, ndim=2, mode='c'] fitnesses_idxs
+    cdef np.ndarray[np.double_t, ndim=2, mode='c'] fitnesses_idxs_sort
+    cdef np.ndarray[np.double_t, ndim=2, mode='c'] survivors
+    cdef np.ndarray[np.int_t, ndim=2, mode='c'] mating_pairs
+    cdef np.ndarray chromosome1, chromosome2, children, child1, child2
+    # Initialize
+    #cdef np.ndarray[np.double_t, ndim=2, mode='c'] chromosomes = random_population(pop_size, n_sp, locs, widths)
+    new_chromosome = np.zeros([pop_size, n_sp], dtype=np.double)
+    best_fitness_per_generation = np.zeros(n_gen+1, dtype=np.double)
+    if nprocs > 1:
+        def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
+            new_fitnesses = par_fitness_eval(fitness_func, chromosomes, i_n_new, nprocs)
+            fitnesses[i_n_new:] = new_fitnesses[:]
+            return fitnesses
+    else:
+        def evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs):
+            fitnesses = _compute_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses)
+            return fitnesses
+    # Begin generating new generations
+    for i_gen in tqdm(range(n_gen), desc='Generations: '):
+        i_n_new = pop_size/2
+
+        if i_gen > 0:
+            fitnesses = evaluate_fitnesses(fitness_func, chromosomes, pop_size, i_n_new, fitnesses, nprocs)
+
+        fitnesses_idxs = np.zeros([pop_size, 2], dtype=np.double)
+        _fill_fitness_idxs(pop_size, fitnesses, fitnesses_idxs)
+
+        # Selection
+        ind = np.argsort(fitnesses_idxs[:,0])
+        fitnesses_idxs_sort = fitnesses_idxs[ind]
+        best_fitness_per_generation[i_gen] = fitnesses_idxs_sort[-1,0]
+        survivors = fitnesses_idxs_sort[pop_size/2:]
+        # Move over the survivors
+        _move_over_survivors(pop_size, survivors, chromosomes, new_chromosome)
+        mating_pairs = choose_mating_pairs(survivors, pop_size)
+        # Generate children
+        _generate_children(pop_size, n_sp, i_n_new, mating_pairs, chromosomes, new_chromosome)
+        # Replace the old population with the new one
+        #chromosomes = new_chromosome.copy()
+        double_deepcopy_2d(chromosomes, new_chromosome, pop_size, n_sp)
+        # Mutation
+        if i_gen < (n_gen-1):
+            mutation(chromosomes, locs, widths, pop_size, n_sp, mutation_rate)
+        _copy_survivor_fitnesses(pop_size, survivors, fitnesses)
+    return chromosomes, best_fitness_per_generation
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef void _fill_fitness_idxs(int pop_size, double[:] fitnesses,
