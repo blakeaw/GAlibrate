@@ -136,10 +136,10 @@ class GAO(object):
         self._fittest_fitness = fittest_fitness
         best_fitness_per_generation[-1] = fittest_fitness
         self._best_fitness_per_generation = best_fitness_per_generation
-        self._total_generations += self.generations
+        self._total_generations = self.generations
         return fittest_chromosome, fittest_fitness
 
-    def continue_run(self, generations, verbose=False, nprocs=1):
+    def resume(self, generations=None, verbose=False, nprocs=1):
         """Continue the GAO for additional generations.
         Returns:
             tuple of (numpy.ndarray, float): Tuple containing the
@@ -147,6 +147,8 @@ class GAO(object):
             during the search and the corresponding fitness value:
             (theta, fitness)
         """
+        if generations is None:
+            generations = self.generations
         sp_locs = np.array(
             [sampled_parameter.loc for sampled_parameter in self.sampled_parameters]
         )
