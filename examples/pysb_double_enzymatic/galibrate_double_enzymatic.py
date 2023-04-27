@@ -50,8 +50,9 @@ try:
         Y = np.copy(position)
         param_values[rates_mask] = 10 ** Y
         sim = solver.run(param_values=param_values).all
-        plt.plot(tspan, sim['Product'], label='Produc sim')
-        plt.errorbar(tspan, exp_avg, yerr=exp_sd)
+        plt.plot(tspan, sim['Product'], label='Fit')
+        plt.errorbar(tspan, exp_avg, yerr=exp_sd, label='Data', linestyle="", marker='s')
+        plt.legend(loc=0)
         plt.show()
 except ImportError:
     def display(position):
@@ -81,7 +82,7 @@ def run_galibrate():
     # Construct the GAO
     gao = GAO(sampled_parameters, fitness, population_size,
               generations=50, mutation_rate=0.1)
-    best_theta, best_theta_fitness = gao.run(nprocs=2)
+    best_theta, best_theta_fitness = gao.run(nprocs=1)
     print("best_theta: ",best_theta)
     print("best_theta_fitness: ", best_theta_fitness)
     display(best_theta)
