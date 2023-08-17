@@ -109,7 +109,7 @@ class GaoIt(object):
         self.parms[key] = loc_width
 
     def __delitem__(self, key):
-        del self.parm[key]
+        del self.parms[key]
 
     def __contains__(self, key):
         return (key in self.names)
@@ -137,13 +137,13 @@ class GaoIt(object):
         return [(parm.name in names) for parm in model_parameters]
 
     def locs(self):
-        return np.array([self.parm[name][0] for name in self.parm.keys()])
+        return np.array([self.parms[name][0] for name in self.parms.keys()])
 
     def widths(self):
-        return np.array([self.parm[name][1] for name in self.parm.keys()])
+        return np.array([self.parms[name][1] for name in self.parms.keys()])
 
     def sampled_parameters(self):
-        return [SampledParameter(name, self.parm[name][0], self.parm[name][1]) for name in self.keys()]
+        return [SampledParameter(name, self.parms[name][0], self.parms[name][1]) for name in self.keys()]
 
     def add_all_kinetic_params(self, pysb_model):
         for rule in pysb_model.rules:

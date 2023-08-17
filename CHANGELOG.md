@@ -14,7 +14,7 @@ N/A
 
 ### Fixed
 
-## [0.7.0] - 2023-04-27
+## [0.7.0] - 2023-04-27, 2023-08-17
 
 ### Added
  - New `benchmarks` module that defines functions often used to test and benchmark single-objective optimization applications.
@@ -26,6 +26,8 @@ N/A
 ### Changed
 
 ### Fixed
+ - Corrected instances of `self.parm` in the `GaoIt` class to `self.parms`; fix for Issue https://github.com/blakeaw/GAlibrate/issues/8 
+ - Added an `__init__.py` under `pysb_utils` that imports the `GaoIt` and `GAlibrateIt` classes; fix for Issue https://github.com/blakeaw/GAlibrate/issues/7
 
 ## [0.6.0] - 2020-06-21
 
