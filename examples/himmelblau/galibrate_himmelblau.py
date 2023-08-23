@@ -32,11 +32,11 @@ if __name__ == "__main__":
     ]
 
     # Set the active point population size
-    population_size = 100
+    population_size = 1000
 
     # Construct the Genetic Algorithm-based Optimizer.
     gao = GAO(
-        sampled_parameters, fitness, population_size, generations=50, mutation_rate=0.1
+        sampled_parameters, fitness, population_size, generations=100, mutation_rate=0.1
     )
     # run it
     best_theta, best_theta_fitness = gao.run()
