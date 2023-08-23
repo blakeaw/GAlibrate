@@ -5,10 +5,10 @@ import numpy as np
 from .par_fitness_eval import par_fitness_eval
 
 _run_gao_import = False
+
 # Try the numba version of run_gao
 try:
     from . import run_gao_numba as run_gao
-
     _run_gao_import = True
     warnings.warn("------Running GAO with numba optimization.------", RuntimeWarning)
 except ImportError:
@@ -27,7 +27,19 @@ if not _run_gao_import:
         )
     except ImportError:
         _run_gao_import = False
-# Numba nor Cython worked, so fallback to the pure Python version
+
+# Neither Numba nor Cython worked, so try the Julia version
+if not _run_gao_import:
+    try:
+        from . import run_gao_julia as run_gao
+        _run_gao_import = True
+        warnings.warn(
+            "------Running GAO with Julia optimization.------", RuntimeWarning
+        )
+    except ImportError:
+        _run_gao_import = False
+
+# None of Numba, Cython, or Julia worked, so fallback to the pure Python version
 if not _run_gao_import:
     from . import run_gao_py as run_gao
 
