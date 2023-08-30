@@ -16,6 +16,13 @@ def run_gao(pop_size, n_sp, locs, widths, n_gen,
     #@numba.jit('float64(float64[:])', cache=True)
     #def wrap_fitness_func(theta):
     #    return fitness_func(theta)
+
+    # # # Try compiling the fitness function with nopyton mode
+    # try:
+    #     fitness_func = numba.njit(fitness_func)
+    # except:
+    #     pass    
+
     # Initialize
     chromosomes = random_population(pop_size, n_sp, locs, widths)
     new_chromosome = np.zeros((pop_size, n_sp))

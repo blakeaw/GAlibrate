@@ -17,8 +17,9 @@ except ImportError:
 if not _run_gao_import:
     try:
         import pyximport
-
-        pyximport.install(language_level=3)
+        # Added the setup_args with include_dirs for numpy so it pyximport can build
+        # the code on Windows machine. 
+        pyximport.install(language_level=3, setup_args={"include_dirs":np.get_include()})
         from . import run_gao_cython as run_gao
 
         _run_gao_import = True
