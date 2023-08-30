@@ -22,8 +22,11 @@ N/A
  - 3-point line example.
  - PySB double-enzymatic model example.
  - Functions to resume/continue GAO runs for additional generations: `GAO.resume` and underlying functions `run_gao_py.continue_gao`, `run_gao_numba.continue_gao`, and `run_gao_cython.continue_gao`. 
+ - `run_gao_julia` which ports key functions to Julia via PyJulia as another alternative to Numba or Cython acceleration. 
+ - Notebook `01_scaling-performance` in a new `notebooks` directory. 
 
 ### Changed
+  - The setup.py uses setuptools now instead of distutils. The new setup includes the Cython `.pyx` and Julia `.jl` files as data files in the package.  
 
 ### Fixed
  - Corrected instances of `self.parm` in the `GaoIt` class to `self.parms`; fix for Issue https://github.com/blakeaw/GAlibrate/issues/8 
