@@ -14,7 +14,7 @@ N/A
 
 ### Fixed
 
-## [0.7.0] - 2023-04-27, 2023-08-17
+## [0.7.0] - 2023-04-27, 2023-08-17, 2023-08-30
 
 ### Added
  - New `benchmarks` module that defines functions often used to test and benchmark single-objective optimization applications.
@@ -24,6 +24,8 @@ N/A
  - Functions to resume/continue GAO runs for additional generations: `GAO.resume` and underlying functions `run_gao_py.continue_gao`, `run_gao_numba.continue_gao`, and `run_gao_cython.continue_gao`. 
  - `run_gao_julia` which ports key functions to Julia via PyJulia as another alternative to Numba or Cython acceleration. 
  - Notebook `01_scaling-performance` in a new `notebooks` directory. 
+ - `tests` directory.
+ - Test code for the `galibrate.benchmarks` and `galibrate.sampled_parameters`.
 
 ### Changed
   - The setup.py uses setuptools now instead of distutils. The new setup includes the Cython `.pyx` and Julia `.jl` files as data files in the package.  
