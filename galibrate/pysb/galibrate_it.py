@@ -122,7 +122,7 @@ class GaoIt(object):
         try:
             name = parm.name
             self.__delitem__(name)
-        except TypeError:
+        except (TypeError, AttributeError):
             self.__delitem__(parm)
         return self
 
