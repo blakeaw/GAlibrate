@@ -208,9 +208,12 @@ class GAlibrateIt(object):
 
     """
     def __init__(self, model, observable_data, timespan,
-                 solver=pysb.simulator.ScipyOdeSimulator,
+                 solver=None,
                  solver_kwargs=None, gao_it=None):
         """Inits the GAlibrateIt."""
+        if solver is None:
+           from pysb.simulator import ScipyOdeSimulator
+           solver = ScipyOdeSimulator
         if solver_kwargs is None:
             solver_kwargs = dict()
         self.model = model
