@@ -15,10 +15,7 @@ import numpy as np
 from galibrate.sampled_parameter import SampledParameter
 from galibrate import GAO
 from galibrate.benchmarks import sphere
-
-from galibrate import run_gao_py
 from galibrate import gao
-gao.run_gao = run_gao_py
 
 # Define the fitness function to minimize the 'sphere' objective function.
 # minimum is x=0 and f(x) = 0
