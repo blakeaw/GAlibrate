@@ -112,7 +112,7 @@ class GaoIt(object):
         del self.parms[key]
 
     def __contains__(self, key):
-        return (key in self.names)
+        return (key in self.names())
 
     def __iadd__(self, parm):
         self.__call__(parm)
@@ -160,7 +160,7 @@ class GaoIt(object):
                  kinetic_params.append(rule.rate_forward)
             if rule.rate_reverse:
                  kinetic_params.append(rule.rate_reverse)
-        for param in pysb_model.paramters:
+        for param in pysb_model.parameters:
             if param not in kinetic_params:
                 self.__call__(param)
         return
