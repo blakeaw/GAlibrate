@@ -4,7 +4,6 @@ from galibrate.sampled_parameter import SampledParameter
 from galibrate import run_gao_numba
 from galibrate import gao
 gao.run_gao = run_gao_numba
-from galibrate import GAO
 from galibrate.benchmarks import sphere
 
 # Define the fitness function to minimize the 'sphere' objective function.
@@ -29,10 +28,10 @@ SHARED = dict()
 
 def test_initialization():
     # Construct the Genetic Algorithm-based Optimizer.
-    gao = GAO(
+    gao_loc = gao.GAO(
         sampled_parameters, fitness, population_size, generations=generations, mutation_rate=mutation_rate
     )
-    SHARED['gao'] = gao
+    SHARED['gao'] = gao_loc
 
 def test_attributes():
     assert SHARED['gao'].fitness_function == fitness
@@ -81,10 +80,10 @@ def test_property_final_population_fitness():
 
 def test_run_parallel():
     # Construct the Genetic Algorithm-based Optimizer.
-    gao = GAO(
+    gao_loc = gao.GAO(
         sampled_parameters, fitness, population_size, generations=1, mutation_rate=mutation_rate
     )
-    SHARED['gao_par'] = gao    
+    SHARED['gao_par'] = gao_loc    
     best_theta, best_theta_fitness = SHARED['gao_par'].run(nprocs=2)
 
 
