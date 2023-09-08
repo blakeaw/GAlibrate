@@ -1,9 +1,10 @@
 import numpy as np
 
 from galibrate.sampled_parameter import SampledParameter
-from galibrate import run_gao_numba
+#from galibrate import run_gao_numba
 from galibrate import gao
-gao.run_gao = run_gao_numba
+gao._set_run_gao_numba()
+#gao.run_gao = run_gao_numba
 from galibrate.benchmarks import sphere
 
 # Define the fitness function to minimize the 'sphere' objective function.
