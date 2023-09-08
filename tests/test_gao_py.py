@@ -3,14 +3,17 @@ import numpy as np
 from galibrate.sampled_parameter import SampledParameter
 from galibrate import run_gao_py
 from galibrate import gao
+
 gao.run_gao = run_gao_py
 from galibrate import GAO
 from galibrate.benchmarks import sphere
+
 
 # Define the fitness function to minimize the 'sphere' objective function.
 # minimum is x=0 and f(x) = 0
 def fitness(chromosome):
     return -sphere(chromosome)
+
 
 # Set up the list of sampled parameters: the range is (-10:10)
 parm_names = list(["x", "y", "z"])
@@ -27,73 +30,90 @@ additional = 10
 mutation_rate = 0.2
 SHARED = dict()
 
+
 def test_initialization():
     # Construct the Genetic Algorithm-based Optimizer.
     gao = GAO(
-        sampled_parameters, fitness, population_size, generations=generations, mutation_rate=mutation_rate
+        sampled_parameters,
+        fitness,
+        population_size,
+        generations=generations,
+        mutation_rate=mutation_rate,
     )
-    SHARED['gao'] = gao
+    SHARED["gao"] = gao
+
 
 def test_attributes():
-    assert SHARED['gao'].fitness_function == fitness
-    assert SHARED['gao'].sampled_parameters == sampled_parameters
-    assert SHARED['gao'].population_size == population_size
-    assert SHARED['gao'].generations == generations
-    assert np.isclose(SHARED['gao'].mutation_rate, mutation_rate)
+    assert SHARED["gao"].fitness_function == fitness
+    assert SHARED["gao"].sampled_parameters == sampled_parameters
+    assert SHARED["gao"].population_size == population_size
+    assert SHARED["gao"].generations == generations
+    assert np.isclose(SHARED["gao"].mutation_rate, mutation_rate)
+
 
 def test_run():
-    best_theta, best_theta_fitness = SHARED['gao'].run()
-    assert np.isclose(best_theta_fitness, 0.)
+    best_theta, best_theta_fitness = SHARED["gao"].run()
+    assert np.isclose(best_theta_fitness, 0.0)
     assert np.allclose(min_point, best_theta)
 
+
 def test_resume():
-    best_theta, best_theta_fitness = SHARED['gao'].resume(generations=additional)
-    assert np.isclose(best_theta_fitness, 0.)
-    assert np.allclose(min_point, best_theta) 
+    best_theta, best_theta_fitness = SHARED["gao"].resume(generations=additional)
+    assert np.isclose(best_theta_fitness, 0.0)
+    assert np.allclose(min_point, best_theta)
+
 
 def test_property_best():
-    best_theta, best_theta_fitness = SHARED['gao'].best
-    assert np.isclose(best_theta_fitness, 0.)
-    assert np.allclose(min_point, best_theta)     
+    best_theta, best_theta_fitness = SHARED["gao"].best
+    assert np.isclose(best_theta_fitness, 0.0)
+    assert np.allclose(min_point, best_theta)
+
 
 def test_property_best_fitness_per_generation():
-    bests = SHARED['gao'].best_fitness_per_generation
+    bests = SHARED["gao"].best_fitness_per_generation
     assert bests is not None
-    assert len(bests) == (generations + additional + 2) 
-    assert np.isclose(bests[-1], 0.)
-    assert bests[0] < 0.
+    assert len(bests) == (generations + additional + 2)
+    assert np.isclose(bests[-1], 0.0)
+    assert bests[0] < 0.0
+
 
 def test_property_total_generations():
-    total = SHARED['gao'].total_generations
-    assert total == (generations + additional) 
+    total = SHARED["gao"].total_generations
+    assert total == (generations + additional)
+
 
 def test_property_final_population():
-    final = SHARED['gao'].final_population
+    final = SHARED["gao"].final_population
     assert final is not None
     assert len(final) == population_size
     assert len(final[0]) == len(sampled_parameters)
 
+
 def test_property_final_population_fitness():
-    final = SHARED['gao'].final_population_fitness
+    final = SHARED["gao"].final_population_fitness
     assert final is not None
     assert len(final) == population_size
-    assert np.isclose(np.max(final), 0.)
+    assert np.isclose(np.max(final), 0.0)
+
 
 def test_run_parallel():
     # Construct the Genetic Algorithm-based Optimizer.
     gao = GAO(
-        sampled_parameters, fitness, population_size, generations=1, mutation_rate=mutation_rate
+        sampled_parameters,
+        fitness,
+        population_size,
+        generations=1,
+        mutation_rate=mutation_rate,
     )
-    SHARED['gao_par'] = gao    
-    best_theta, best_theta_fitness = SHARED['gao_par'].run(nprocs=2)
+    SHARED["gao_par"] = gao
+    best_theta, best_theta_fitness = SHARED["gao_par"].run(nprocs=2)
 
 
 def test_resume_parallel():
-    best_theta, best_theta_fitness = SHARED['gao_par'].resume(generations=1, nprocs=2)
+    best_theta, best_theta_fitness = SHARED["gao_par"].resume(generations=1, nprocs=2)
 
 
 if __name__ == "__main__":
-
     test_initialization()
     test_attributes()
     test_run()

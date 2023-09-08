@@ -40,18 +40,19 @@ def test_rungaojulia_mutation():
     # Shift the locs up by a small amount to make
     # sure all mutants should be different than the originals.
     locs_adjusted = locs + 0.1
-    #population = rand_pop.copy()
+    # population = rand_pop.copy()
     population = run_gao_julia.Main.mutation(
         rand_pop, locs_adjusted, widths, pop_size, n_params, mutation_rate
     )
     assert not np.allclose(rand_pop, population)
     # Now all mutants should be the same as the originals.
     mutation_rate = 0.0
-    #population = rand_pop.copy()
+    # population = rand_pop.copy()
     population = run_gao_julia.Main.mutation(
         rand_pop, locs, widths, pop_size, n_params, mutation_rate
     )
     assert np.allclose(rand_pop, population)
+
 
 from galibrate.sampled_parameter import SampledParameter
 from galibrate.benchmarks import sphere
@@ -92,7 +93,7 @@ def test_rungaojulia_run_gao():
         1,
     )
     assert new_population.shape == (population_size, len(parm_names))
-    SHARED['population'] = new_population
+    SHARED["population"] = new_population
     new_population, best_pg = run_gao_julia.run_gao(
         population_size,
         len(parm_names),
@@ -105,12 +106,13 @@ def test_rungaojulia_run_gao():
     )
     assert new_population.shape == (population_size, len(parm_names))
 
+
 def test_rungaojulia_continue_gao():
-    fitnesses = np.array([fitness(individual) for individual in SHARED['population']])
+    fitnesses = np.array([fitness(individual) for individual in SHARED["population"]])
     new_population, best_pg = run_gao_julia.continue_gao(
         population_size,
         len(parm_names),
-        SHARED['population'],
+        SHARED["population"],
         fitnesses,
         locs_sphere,
         widths_sphere,
@@ -123,7 +125,7 @@ def test_rungaojulia_continue_gao():
     new_population, best_pg = run_gao_julia.continue_gao(
         population_size,
         len(parm_names),
-        SHARED['population'],
+        SHARED["population"],
         fitnesses,
         locs_sphere,
         widths_sphere,
@@ -133,6 +135,7 @@ def test_rungaojulia_continue_gao():
         2,
     )
     assert new_population.shape == (population_size, len(parm_names))
+
 
 if __name__ == "__main__":
     test_rungaojulia_random_population()

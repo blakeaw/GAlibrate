@@ -14,7 +14,7 @@ N/A
 
 ### Fixed
 
-## [0.7.0] - 2023-04-27, 2023-08-17, 2023-08-30
+## [0.7.0] - 2023-04-27 to 2023-08-31
 
 ### Added
  - New `benchmarks` module that defines functions often used to test and benchmark single-objective optimization applications.
@@ -26,13 +26,23 @@ N/A
  - Notebook `01_scaling-performance` in a new `notebooks` directory. 
  - `tests` directory.
  - Test code for the `galibrate.benchmarks` and `galibrate.sampled_parameters`.
+ - Test code for `galibrate.gao` and the `galibrate.gao.GAO` class, as well as different integrations using the Python, Cython, Numba, and Julia backend versions: `test_gao`, `test_gao_py`, `test_gao_numba`, `test_gao_cython`, and `test_gao_julia`.
+ - Test code for the `GaoIt` class in the pysb submodule `galibrate.pysb.galibrate_it`: test code in `test_pysb`
+ - Test code for the `galibrate.run_gao_numba`, `galibrate.run_gao_julia`, and `galibrate.run_gao_cython` modules: test code in `test_rungaonumba`, `test_rungaojulia`, and `test_rungaocython`, respectively.
+ - New functions in `galibrate.gao` that load specific backend version: `_set_run_gao_numba`, etc. 
 
 ### Changed
   - The setup.py uses setuptools now instead of distutils. The new setup includes the Cython `.pyx` and Julia `.jl` files as data files in the package.  
+  - Renamed the `galibrate.pysb_utils` to `galibrate.pysb`.
+  - Formatted code using the Black format.
 
 ### Fixed
  - Corrected instances of `self.parm` in the `GaoIt` class to `self.parms`; fix for Issue https://github.com/blakeaw/GAlibrate/issues/8 
  - Added an `__init__.py` under `pysb_utils` that imports the `GaoIt` and `GAlibrateIt` classes; fix for Issue https://github.com/blakeaw/GAlibrate/issues/7
+ - Error in the `GaoIt.mask` function which called `self.names` instead of correct fucntion call `self.names()`.
+ - Error in the `GaoIt.add_all_nonkinetic_params` with misspelled `pysb_model.paramters` - correct: `pysb_model.parameters`
+ - Switched instances of `np.int` to `np.int64` or `np.int_` (Cython module) for the following NumPy deprecation warning: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. 
+
 
 ## [0.6.0] - 2020-06-21
 

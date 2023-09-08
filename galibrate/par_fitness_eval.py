@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import numpy as np
 
+
 def par_fitness_eval(fitness_func, chromosomes, first_chromosome, nprocs):
     eval_chromosomes = chromosomes[first_chromosome:]
     max_procs = mp.cpu_count()

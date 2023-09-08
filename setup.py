@@ -8,10 +8,12 @@ setup(
     version="0.7.0",
     python_requires=">=3.10",
     install_requires=["numpy>=1.23.5", "scipy>=1.10.1"],
-    extras_require={"cython": "cython>=0.29.33",
-                     "pysb":"pysb>=1.15.0",
-                     "numba":"numba>=0.56.4",
-                     "pyjulia":"julia>=0.6.1"},
+    extras_require={
+        "cython": "cython>=0.29.33",
+        "pysb": "pysb>=1.15.0",
+        "numba": "numba>=0.56.4",
+        "pyjulia": "julia>=0.6.1",
+    },
     author="Blake A. Wilson",
     author_email="blakeaw1102@gmail.com",
     description="Python toolkit for continuous Genetic Algorithm optimization.",
@@ -25,6 +27,10 @@ setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    license='MIT',
-    keywords=['continuous genetic algorithm', 'model calibration', 'parameter estimation']
+    license="MIT",
+    keywords=[
+        "continuous genetic algorithm",
+        "model calibration",
+        "parameter estimation",
+    ],
 )

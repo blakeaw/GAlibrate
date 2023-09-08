@@ -1,8 +1,9 @@
 import numpy as np
 import pyximport
+
 # Added the setup_args with include_dirs for numpy so it pyximport can build
-# the code on Windows machine. 
-pyximport.install(language_level=3, setup_args={"include_dirs":np.get_include()})
+# the code on Windows machine.
+pyximport.install(language_level=3, setup_args={"include_dirs": np.get_include()})
 from galibrate import run_gao_cython
 
 from galibrate.sampled_parameter import SampledParameter
@@ -44,7 +45,7 @@ def test_rungaocython_run_gao():
         1,
     )
     assert new_population.shape == (population_size, len(parm_names))
-    SHARED['population'] = new_population
+    SHARED["population"] = new_population
     new_population, best_pg = run_gao_cython.run_gao(
         population_size,
         len(parm_names),
@@ -57,12 +58,13 @@ def test_rungaocython_run_gao():
     )
     assert new_population.shape == (population_size, len(parm_names))
 
+
 def test_rungaocython_continue_gao():
-    fitnesses = np.array([fitness(individual) for individual in SHARED['population']])
+    fitnesses = np.array([fitness(individual) for individual in SHARED["population"]])
     new_population, best_pg = run_gao_cython.continue_gao(
         population_size,
         len(parm_names),
-        SHARED['population'],
+        SHARED["population"],
         fitnesses,
         locs_sphere,
         widths_sphere,
@@ -75,7 +77,7 @@ def test_rungaocython_continue_gao():
     new_population, best_pg = run_gao_cython.continue_gao(
         population_size,
         len(parm_names),
-        SHARED['population'],
+        SHARED["population"],
         fitnesses,
         locs_sphere,
         widths_sphere,
@@ -85,6 +87,7 @@ def test_rungaocython_continue_gao():
         2,
     )
     assert new_population.shape == (population_size, len(parm_names))
+
 
 if __name__ == "__main__":
     test_rungaocython_run_gao()

@@ -1,3 +1,3 @@
 """Initialize the galibrate package.
 """
-from .gao import GAO 
+from .gao import GAO

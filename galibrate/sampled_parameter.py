@@ -9,6 +9,7 @@ ranges that are to be sampled during the Genetic Algorithm optimization run.
 import numpy as np
 from scipy.stats import uniform
 
+
 class SampledParameter(object):
     """A parameter that will be sampled during a Nested Sampling run.
     Attributes:
