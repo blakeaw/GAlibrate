@@ -5,23 +5,44 @@ import numpy as np
 from .par_fitness_eval import par_fitness_eval
 
 _run_gao_import = False
+run_gao = None
+
+def _set_run_gao_numba():    
+    from . import run_gao_numba
+    run_gao = run_gao_numba
+    return
+
+def _set_run_gao_cython():    
+    import pyximport
+    # Added the setup_args with include_dirs for numpy so it pyximport can build
+    # the code on Windows machine. 
+    pyximport.install(language_level=3, setup_args={"include_dirs":np.get_include()})
+    from . import run_gao_cython
+    run_gao = run_gao_cython
+    return
+
+def _set_run_gao_julia():    
+    from . import run_gao_julia
+    run_gao = run_gao_julia
+    return
+
+def _set_run_gao_py():    
+    from . import run_gao_py
+    run_gao = run_gao_py
+    return
 
 # Try the numba version of run_gao
 try:
-    from . import run_gao_numba as run_gao
+    _set_run_gao_numba()
     _run_gao_import = True
     warnings.warn("------Running GAO with numba optimization.------", RuntimeWarning)
-except ImportError:
+except:
     _run_gao_import = False
 # Numba didn't work, so try the Cython version
 if not _run_gao_import:
     try:
-        import pyximport
-        # Added the setup_args with include_dirs for numpy so it pyximport can build
-        # the code on Windows machine. 
-        pyximport.install(language_level=3, setup_args={"include_dirs":np.get_include()})
-        from . import run_gao_cython as run_gao
 
+        _set_run_gao_cython()
         _run_gao_import = True
         warnings.warn(
             "------Running GAO with Cython optimization.------", RuntimeWarning
@@ -32,7 +53,7 @@ if not _run_gao_import:
 # Neither Numba nor Cython worked, so try the Julia version
 if not _run_gao_import:
     try:
-        from . import run_gao_julia as run_gao
+        _set_run_gao_julia()
         _run_gao_import = True
         warnings.warn(
             "------Running GAO with Julia optimization.------", RuntimeWarning
@@ -42,8 +63,7 @@ if not _run_gao_import:
 
 # None of Numba, Cython, or Julia worked, so fallback to the pure Python version
 if not _run_gao_import:
-    from . import run_gao_py as run_gao
-
+    _set_run_gao_py()
     _run_gao_import = True
 
 
