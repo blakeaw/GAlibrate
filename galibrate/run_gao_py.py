@@ -133,7 +133,7 @@ def choose_mating_pairs(survivors, pop_size):
     weights = survivors[:,0] - survivors[:,0].min() + 1.
     prob = weights/ weights.sum()
     pre_mating_pairs = np.random.choice(int(pop_size/2), size=[int(pop_size/4), 2], p=prob)
-    mating_pairs = np.zeros([int(pop_size/4), 2], dtype=np.int)
+    mating_pairs = np.zeros([int(pop_size/4), 2], dtype=np.int64)
 
     e0 = 0
     e1 = 1
