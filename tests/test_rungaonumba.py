@@ -48,14 +48,95 @@ def test_rungaonumba_mutation():
     # Now all mutants should be the same as the originals.
     mutation_rate = 0.0
     population = rand_pop.copy()
-    run_gao_numba.mutation(
-        population, locs, widths, pop_size, n_params, mutation_rate
-    )
+    run_gao_numba.mutation(population, locs, widths, pop_size, n_params, mutation_rate)
     assert np.allclose(rand_pop, population)
 
+
+from galibrate.sampled_parameter import SampledParameter
+from galibrate.benchmarks import sphere
+
+
+# Define the fitness function to minimize the 'sphere' objective function.
+# minimum is x=0 and f(x) = 0
+def fitness(chromosome):
+    return -sphere(chromosome)
+
+
+# Set up the list of sampled parameters: the range is (-10:10)
+parm_names = list(["x", "y", "z"])
+sampled_parameters = [
+    SampledParameter(name=p, loc=-10.0, width=20.0) for p in parm_names
+]
+min_point = np.zeros(3)
+locs_sphere = np.zeros(3) - 10.0
+widths_sphere = np.zeros(3) + 20.0
+
+# Set the active point population size
+population_size = 20
+generations = 10
+additional = 10
+mutation_rate_sphere = 0.2
+SHARED = dict()
+
+
+def test_rungaonumba_run_gao():
+    new_population, best_pg = run_gao_numba.run_gao(
+        population_size,
+        len(parm_names),
+        locs_sphere,
+        widths_sphere,
+        generations,
+        mutation_rate_sphere,
+        fitness,
+        1,
+    )
+    assert new_population.shape == (population_size, len(parm_names))
+    SHARED['population'] = new_population
+    new_population, best_pg = run_gao_numba.run_gao(
+        population_size,
+        len(parm_names),
+        locs_sphere,
+        widths_sphere,
+        generations,
+        mutation_rate_sphere,
+        fitness,
+        2,
+    )
+    assert new_population.shape == (population_size, len(parm_names))
+
+def test_rungaonumba_continue_gao():
+    fitnesses = np.array([fitness(individual) for individual in SHARED['population']])
+    new_population, best_pg = run_gao_numba.continue_gao(
+        population_size,
+        len(parm_names),
+        SHARED['population'],
+        fitnesses,
+        locs_sphere,
+        widths_sphere,
+        additional,
+        mutation_rate_sphere,
+        fitness,
+        1,
+    )
+    assert new_population.shape == (population_size, len(parm_names))
+    new_population, best_pg = run_gao_numba.continue_gao(
+        population_size,
+        len(parm_names),
+        SHARED['population'],
+        fitnesses,
+        locs_sphere,
+        widths_sphere,
+        additional,
+        mutation_rate_sphere,
+        fitness,
+        2,
+    )
+    assert new_population.shape == (population_size, len(parm_names))
 
 if __name__ == "__main__":
     test_rungaonumba_random_population()
     test_rungaonumba_choose_mating_pairs()
     test_rungaonumba_crossover()
     test_rungaonumba_mutation()
+    test_rungaonumba_run_gao()
+    test_rungaonumba_continue_gao()
