@@ -218,7 +218,7 @@ cdef np.ndarray[np.int_t, ndim=2] choose_mating_pairs(np.ndarray[np.double_t, nd
     cdef np.ndarray[np.int_t, ndim=2] pre_mating_pairs = np.random.choice(pop_size/2, size=[pop_size/4, 2], p=prob)
     cdef long[:,:] pre_mating_pairs_view = pre_mating_pairs
     cdef Py_ssize_t i_hps, e0, e1
-    cdef np.ndarray[np.int_t, ndim=2] mating_pairs = np.zeros([pop_size/4, 2], dtype=np.int64)
+    cdef np.ndarray[np.int_t, ndim=2] mating_pairs = np.zeros([pop_size/4, 2], dtype=np.int_)
     cdef long[:,:] mating_pairs_view = mating_pairs
     e0 = 0
     e1 = 1
