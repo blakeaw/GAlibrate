@@ -23,7 +23,8 @@ N/A
  - PySB double-enzymatic model example.
  - Functions to resume/continue GAO runs for additional generations: `GAO.resume` and underlying functions `run_gao_py.continue_gao`, `run_gao_numba.continue_gao`, and `run_gao_cython.continue_gao`. 
  - `run_gao_julia` which ports key functions to Julia via PyJulia as another alternative to Numba or Cython acceleration. 
- - Notebook `01_scaling-performance` in a new `notebooks` directory. 
+ - Notebook `01_profile-performance` in a new `notebooks` directory. 
+ - Notebook `02_benchmark-parametric-scaling-performance` the new `notebooks` directory.
  - `tests` directory.
  - Test code for the `galibrate.benchmarks` and `galibrate.sampled_parameters`.
  - Test code for `galibrate.gao` and the `galibrate.gao.GAO` class, as well as different integrations using the Python, Cython, Numba, and Julia backend versions: `test_gao`, `test_gao_py`, `test_gao_numba`, `test_gao_cython`, and `test_gao_julia`.

@@ -2,8 +2,8 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.6.0-orange.svg)
-[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.6.0)
+![version](https://img.shields.io/badge/version-0.7.0-orange.svg)
+[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.0)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/gh/blakeaw/GAlibrate/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
@@ -18,6 +18,13 @@ Although **GAlibrate** provides a general framework for running continuous
 genetic algorithm-based optimizations, it was created with systems biology models in mind. It therefore supplies additional tools for working with biological models in the [PySB](http://pysb.org/) format.
 
 ### What's new in
+
+#### version 0.7.0
+ * Julia integration - New version of core GA that ports some key funtions to Julia using the PyJulia package.
+ * New `benchmarks` module defining a set of functions used to benchmark and test single objective optimazation routines.  
+ * Test suite using pytest with 63% overall coverage.
+ * Updated profiling and performance benchmarking Jupyter [notebooks](./notebooks/).
+ * Function to resume/continue GAO runs for additional generations: `GAO.resume`.
 
 #### version 0.6.0
  * core GA now returns an array with fitness value of the fittest individual from each generation which can be accessed from the GAO property `GAO.best_fitness_per_generation`.
