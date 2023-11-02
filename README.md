@@ -25,6 +25,7 @@ genetic algorithm-based optimizations, it was created with systems biology model
  * Test suite using pytest with 63% overall coverage.
  * Updated profiling and performance benchmarking Jupyter [notebooks](./notebooks/).
  * Function to resume/continue GAO runs for additional generations: `GAO.resume`.
+ * Several new example cases under [examples](./examples/)
 
 #### version 0.6.0
  * core GA now returns an array with fitness value of the fittest individual from each generation which can be accessed from the GAO property `GAO.best_fitness_per_generation`.
@@ -99,7 +100,7 @@ The following software is not required for the basic operation of **GAlibrate**,
 GAO runs will display a progress bar that tracks the passage of generations when the [tqdm](https://github.com/tqdm/tqdm) package installed.  
 
 #### PySB
-[PySB](http://pysb.org/) is needed to run PySB models, and it is therfore needed if you want to use tools from the galibrate.pysb_utils package.
+[PySB](http://pysb.org/) is needed to run PySB models, and it is therfore needed if you want to use tools from the `galibrate.pysb`` package.
 
 ------
 
@@ -131,16 +132,18 @@ Parallelism is used when evaluating the fitness function across the population (
 
 #### PySB models
 
-Additionally, **GAlibrate** has a `pysb_utils` sub-package that provides the
-`galibrate_it` module, which defines the GaoIt and GAlibrateIt classes (importable from the pysb_utils package level),
+Additionally, **GAlibrate** has a `pysb` sub-package that provides the
+`galibrate_it` module, which defines the GaoIt and GAlibrateIt classes (importable from the `galibrate.pysb` package level),
 ```python
-from galibrate.pysb_utils import GaoIt, GAlibrateIt
+from galibrate.pysb import GaoIt, GAlibrateIt
 ```  
 which create objects that abstract away some of the effort to setup and generate GAO instances for PySB models; [examples/pysb_dimerization_model](./examples/pysb_dimerization_model) provides some
 examples for using GaoIt and GAlibrateIt objects. The `galibrate_it` module can also be called from the command line to generate a template run script for a PySB model,
+
 ```python
 python -m galibrate.pysb_utils.galibrate_it pysb_model.py output_path
 ```
+
 which users can then modify to fit their needs.
 
 ### Examples
@@ -156,17 +159,3 @@ comments, suggestions, or feature requests for **GAlibrate** can also be submitt
 [GitHub Issue](https://github.com/blakeaw/GAlibrate/issues).
 
 ------
-
-# Citing
-
-If you use the **GAlibrate** software in your research, please cite it. You can export the  **GAlibrate** citation in your preferred format from its [Zenodo DOI](https://doi.org/10.5281/zenodo.3345232) entry.
-
-Also, please cite the following references as appropriate for software used with/via **GAlibrate**:
-
-#### Packages from the SciPy ecosystem
-
-These include NumPy and SciPy for which references can be obtained from:
-https://www.scipy.org/citing.html
-
-#### PySB
-  1. Lopez, C. F., Muhlich, J. L., Bachman, J. A. & Sorger, P. K. Programming biological models in Python using PySB. Mol Syst Biol 9, (2013). doi:[10.1038/msb.2013.1](dx.doi.org/10.1038/msb.2013.1)
