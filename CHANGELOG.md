@@ -4,17 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] - yyyy-mm-dd
-
-N/A
-
-### Added
-
-### Changed
-
-### Fixed
-
-## [0.7.0] - 2023-04-27 to 2023-08-31
+## [0.7.0] - 2023-04-27 to 2024-07-23
 
 ### Added
  - New `benchmarks` module that defines functions often used to test and benchmark single-objective optimization applications.
@@ -59,3 +49,12 @@ N/A
 - Optional progress bar to monitor passage of generations during GAO run that is only displayed if [tqdm](https://github.com/tqdm/tqdm) is installed.
 - Optional [multiprocessing](https://docs.python.org/2/library/multiprocessing.html) based parallelism when evaluating the fitness function over the population during a GAO run.
  
+## [Unreleased] - yyyy-mm-dd
+
+N/A
+
+### Added
+
+### Changed
+
+### Fixed
