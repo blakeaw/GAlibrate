@@ -97,6 +97,9 @@ The following software is not required for the basic operation of **GAlibrate**,
 #### Numba
 **GAlibrate** also includes an implementation of the core genetic algorithm that takes advantage of [Numba](https://numba.pydata.org/)-based JIT compilation and optimization to accelerate the algorithm. This version of genetic algorithm is used if Numba is installed.
 
+#### Julia
+**GAlibrate** also includes an implementation of the core genetic algorithm that takes advantage of porting some key functions to [Julia](https://julialang.org/) for JIT compilation and optimization to accelerate the algorithm. This version of genetic algorithm requires [Julia](https://julialang.org/) and [PyJulia](https://pyjulia.readthedocs.io/en/latest/); note that the Python-based CLI tool [jill](https://pypi.org/project/jill/) is also an option for automating the process of downloading and installing Julia.
+
 #### tqdm
 GAO runs will display a progress bar that tracks the passage of generations when the [tqdm](https://github.com/tqdm/tqdm) package installed.  
 
