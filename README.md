@@ -112,9 +112,13 @@ Tests and coverage analysis use
   * [pytest](https://docs.pytest.org/en/stable/) (`pytest=7.4.0`)
   * [Coverage.py](https://coverage.readthedocs.io/en/7.6.0/) (`coverage=7.2.2`)
 
-Running (from local GAlibrate repo folder):
+Running locally from the GAlibrate repo folder:
 ```
 coverage run -m pytest
+```
+then to see coverage report:
+```
+coverage report -m
 ```
 
 # License
