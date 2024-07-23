@@ -9,11 +9,12 @@ source:
 requirements:
   build:
     - python >=3.10
+    - setuptools >=66.0.0
 
   run:
-    - python >=3.10
-    - numpy
-    - scipy
+    - python >=3.10.11
+    - numpy >=1.23.5
+    - scipy >=1.10.1
 
 build:
   noarch: python
