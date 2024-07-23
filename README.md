@@ -46,8 +46,7 @@ genetic algorithm-based optimizations, it was created with systems biology model
  4. [Documentation and Usage](#documentation-and-usage)
      1. [Quick Overview](#quick-overview)
      2. [Examples](#examples)
- 5. [Contact](#contact)
- 6. [Citing](#citing)  
+ 5. [Contact](#contact)  
 
 ------
 
@@ -147,15 +146,19 @@ python -m galibrate.pysb_utils.galibrate_it pysb_model.py output_path
 which users can then modify to fit their needs.
 
 ### Examples
+
 Additional example scripts that show how to setup and launch Genetic Algorithm runs using **GAlibrate** can be found under [examples](./examples).   
 
 ------
 
 # Contact
 
-To report problems or bugs please open a
-[GitHub Issue](https://github.com/blakeaw/GAlibrate/issues). Additionally, any
-comments, suggestions, or feature requests for **GAlibrate** can also be submitted as a
-[GitHub Issue](https://github.com/blakeaw/GAlibrate/issues).
+### For Support
+
+Email support inquiries to [blakeaw1102@gmail.com](mailto:blakeaw1102@gmail.com)
+
+### Interested in contributing
+
+See [CONTRIBUTING](./CONTRIBUTING.md)
 
 ------
