@@ -1,11 +1,13 @@
 # GAlibrate
 
-![Python version badge](https://img.shields.io/badge/python-3.6,3.7-blue.svg)
+![Python version badge](https://img.shields.io/badge/python-3.10.11-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
 ![version](https://img.shields.io/badge/version-0.7.0-orange.svg)
 [![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.0)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/gh/blakeaw/GAlibrate/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![Static Badge](https://img.shields.io/badge/coverage-63%25-yellow)
 [![DOI](https://zenodo.org/badge/197295657.svg)](https://zenodo.org/badge/latestdoi/197295657)
 
 <p align="center">
@@ -56,7 +58,7 @@ genetic algorithm-based optimizations, it was created with systems biology model
 | :--- |
 |  GAlibrate is still in version zero development so new versions may not be backwards compatible. |
 
-**GAlibrate** installs as the `galibrate` package. It is compatible (i.e., tested) with Python 3.6 and 3.7.
+**GAlibrate** installs as the `galibrate` package. It is compatible (i.e., tested) with Python 3.10.11.
 
 Note that `galibrate` has the following core dependencies:
    * [NumPy](http://www.numpy.org/)
@@ -102,6 +104,18 @@ GAO runs will display a progress bar that tracks the passage of generations when
 [PySB](http://pysb.org/) is needed to run PySB models, and it is therfore needed if you want to use tools from the `galibrate.pysb`` package.
 
 ------
+
+### Testing
+
+Tests and coverage analysis use 
+  
+  * [pytest](https://docs.pytest.org/en/stable/) (`pytest=7.4.0`)
+  * [Coverage.py](https://coverage.readthedocs.io/en/7.6.0/) (`coverage=7.2.2`)
+
+Running (from local GAlibrate repo folder):
+```
+coverage run -m pytest
+```
 
 # License
 

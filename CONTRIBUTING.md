@@ -46,8 +46,8 @@ PR contribution steps:
    * **Bug Fix:** `fix/issue-number`, e.g. `fix/11`
    * **New Feature** `feature/new-feature`, e.g. `feature/foo-bar`   
 3. For feature additions, please include additional tests for the new feature.
-4. Run all the tests using pytest: `python -m pytest`
-5. Once your branch passes all the tests, commit your changes, e.g. `git commit -am 'Add the new-feautre feature.'`
+4. Run all the tests using pytest: `python -m pytest` - or also with coverage (Coverage.py) analysis: `coverage run -m pytest`
+5. Once your branch passes all the tests, commit your changes, e.g. `git commit -am 'Add the new-feature feature.'`
 7. Push the branch to your fork, e.g. `git push origin feature/new-feature`
 8. Create a new [Pull request](https://github.com/blakeaw/GAlibrate/pulls). Reference any relevant Issues in the PR description.
 
