@@ -9,72 +9,61 @@ run_gao = None
 
 
 def _set_run_gao_numba():
-    from . import run_gao_numba
-
-    run_gao = run_gao_numba
-    return
-
+    try:
+        from . import run_gao_numba
+        warnings.warn("------Running GAO with numba optimization.------", RuntimeWarning)
+        return run_gao_numba
+    except:
+        return None
 
 def _set_run_gao_cython():
-    import pyximport
-
-    # Added the setup_args with include_dirs for numpy so it pyximport can build
-    # the code on Windows machine.
-    pyximport.install(language_level=3, setup_args={"include_dirs": np.get_include()})
-    from . import run_gao_cython
-
-    run_gao = run_gao_cython
-    return
-
-
-def _set_run_gao_julia():
-    from . import run_gao_julia
-
-    run_gao = run_gao_julia
-    return
-
-
-def _set_run_gao_py():
-    from . import run_gao_py
-
-    run_gao = run_gao_py
-    return
-
-
-# Try the numba version of run_gao
-try:
-    _set_run_gao_numba()
-    _run_gao_import = True
-    warnings.warn("------Running GAO with numba optimization.------", RuntimeWarning)
-except:
-    _run_gao_import = False
-# Numba didn't work, so try the Cython version
-if not _run_gao_import:
     try:
-        _set_run_gao_cython()
-        _run_gao_import = True
+        import pyximport
+        # Added the setup_args with include_dirs for numpy so it pyximport can build
+        # the code on Windows machine.
+        pyximport.install(language_level=3, setup_args={"include_dirs": np.get_include()})
+        from . import run_gao_cython
         warnings.warn(
             "------Running GAO with Cython optimization.------", RuntimeWarning
         )
-    except ImportError:
-        _run_gao_import = False
+        return run_gao_cython
+    except:
+        return None
 
-# Neither Numba nor Cython worked, so try the Julia version
-if not _run_gao_import:
+
+def _set_run_gao_julia():
     try:
-        _set_run_gao_julia()
-        _run_gao_import = True
+        from . import run_gao_julia
         warnings.warn(
             "------Running GAO with Julia optimization.------", RuntimeWarning
         )
-    except ImportError:
-        _run_gao_import = False
+        return run_gao_julia
+    except:
+        return None
 
+
+def _set_run_gao_py():
+    try:
+        from . import run_gao_py
+        return run_gao_py
+    except:
+        return None
+
+print(run_gao, _run_gao_import)
+# Try the numba version of run_gao
+run_gao = _set_run_gao_numba()
+
+if run_gao is None:
+# Numba didn't work, so try the Cython version
+    run_gao = _set_run_gao_cython()
+if run_gao is None:
+# Neither Numba nor Cython worked, so try the Julia version
+    run_gao = _set_run_gao_julia()
+if run_gao is None:
 # None of Numba, Cython, or Julia worked, so fallback to the pure Python version
-if not _run_gao_import:
-    _set_run_gao_py()
-    _run_gao_import = True
+    run_gao = _set_run_gao_py()
 
+print(run_gao, _run_gao_import)
 
 class GAO(object):
     """A continuous Genetic Algorithm-based Optimizer.

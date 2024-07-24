@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.1] - 2024-07-23
+
+### Fixed
+ - Updated the logic for setting the optimizer backend via the `run_gao` variable; fix for Issue https://github.com/blakeaw/GAlibrate/issues/12 
+
 ## [0.7.0] - 2023-04-27 to 2024-07-23
 
 ### Added

@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="galibrate",
-    version="0.7.0",
+    version="0.7.1",
     python_requires=">=3.10",
     install_requires=["numpy>=1.23.5", "scipy>=1.10.1"],
     extras_require={

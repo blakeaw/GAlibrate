@@ -1,10 +1,10 @@
 package:
   name: galibrate
-  version: "0.7.0"
+  version: "0.7.1"
 
 source:
   git_url: https://github.com/blakeaw/GAlibrate.git
-  git_rev: v0.7.0
+  git_rev: v0.7.1
 
 requirements:
   build:

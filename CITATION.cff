@@ -5,7 +5,7 @@ authors:
   given-names: "Blake"
   orcid: "https://orcid.org/0000-0002-8269-2500"
 title: "GAlibrate: Model calibration using Genetic Algorithm optimization in Python"
-version: 0.7.0
+version: 0.7.1
 doi: 10.5281/zenodo.3345232
 date-released: 2023-11-02
 url: "https://github.com/blakeaw/GAlibrate"

@@ -2,8 +2,8 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.10.11-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.7.0-orange.svg)
-[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.0)
+![version](https://img.shields.io/badge/version-0.7.1-orange.svg)
+[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.1)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/gh/blakeaw/GAlibrate/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -65,14 +65,18 @@ Note that `galibrate` has the following core dependencies:
    * [SciPy](https://www.scipy.org/)
 
 ### pip install
-You can install the latest release of the `galibrate` package using `pip` sourced from the GitHub repo:
+You can install the latest release of the `galibrate` package using `pip` sourced from the GitHub repo - 
+
+**Fresh install:**
 ```
-pip install -e git+https://github.com/blakeaw/GAlibrate@v0.6.0#egg=galibrate
+pip install https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.1.zip
 ```
-However, this will not automatically install the core dependencies. You will have to do that separately:
+**Or to upgrade from an older version:**
 ```
-pip install numpy scipy
+pip install --upgrade https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.1.zip
 ```
+
+### PyPI
 
 `galibrate` can also be `pip` installed from PyPI,
 ```
@@ -80,7 +84,8 @@ pip install galibrate
 ```
 but this version currently doesn't include the Cython accelerated version of the core GA algorithm.
 
-### conda install
+### conda
+
 You can install the `galibrate` package from the `blakeaw` channel:
 ```
 conda install -c blakeaw galibrate
