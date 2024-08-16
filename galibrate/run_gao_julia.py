@@ -2,6 +2,7 @@ from __future__ import print_function
 import os
 import warnings
 import numpy as np
+from sys import platform
 
 # Import PyJulia and setup
 # First, check for a custom Julia runtime
@@ -15,7 +16,23 @@ if JLR is not None:
         JLR
     )
     warnings.warn(warn_message, RuntimeWarning)
-    Julia(runtime=JLR)
+    if platform == "linux":
+        warnings.warn(
+            "Detected Linux platform. Turning off Julia pre-compilation as a workaround to Python static linking to libpython.so incompatibility for PyJulia.\n See https://pyjulia.readthedocs.io/en/latest/troubleshooting.html#your-python-interpreter-is-statically-linked-to-libpython",
+            RuntimeWarning,
+        )
+        Julia(runtime=JLR, compiled_modules=False)
+    else:
+        Julia(runtime=JLR)
+if (platform == "linux") and (JLR is None):
+    from julia import Julia
+
+    warnings.warn(
+        "Detected Linux platform. Turning off Julia pre-compilation as a workaround to Python static linking to libpython.so incompatibility for PyJulia.\n See https://pyjulia.readthedocs.io/en/latest/troubleshooting.html#your-python-interpreter-is-statically-linked-to-libpython",
+        RuntimeWarning,
+    )
+    Julia(compiled_modules=False)
+
 # Now import the Julia Main namespace and
 # include the module with the GAO functions.
 from julia import Main
