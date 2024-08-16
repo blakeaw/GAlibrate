@@ -2,8 +2,8 @@
 
 ![Python version badge](https://img.shields.io/badge/python-3.10.11-blue.svg)
 [![license](https://img.shields.io/github/license/blakeaw/GAlibrate.svg)](LICENSE)
-![version](https://img.shields.io/badge/version-0.7.1-orange.svg)
-[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.1)
+![version](https://img.shields.io/badge/version-0.7.2-orange.svg)
+[![release](https://img.shields.io/github/release-pre/blakeaw/GAlibrate.svg)](https://github.com/blakeaw/GAlibrate/releases/tag/v0.7.2)
 [![anaconda cloud](https://anaconda.org/blakeaw/galibrate/badges/version.svg)](https://anaconda.org/blakeaw/galibrate)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6cdd91c06b11458384becb85db9adb15)](https://www.codacy.com/gh/blakeaw/GAlibrate/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blakeaw/GAlibrate&amp;utm_campaign=Badge_Grade)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -69,11 +69,11 @@ You can install the latest release of the `galibrate` package using `pip` source
 
 **Fresh install:**
 ```
-pip install https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.1.zip
+pip install https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.2.zip
 ```
 **Or to upgrade from an older version:**
 ```
-pip install --upgrade https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.1.zip
+pip install --upgrade https://github.com/blakeaw/GAlibrate/archive/refs/tags/v0.7.2.zip
 ```
 
 ### PyPI
