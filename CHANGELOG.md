@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.2] - 2024-08-16
+
+### Fixed
+ - Added additional logic in `galibrate.run_gao_julia` for checking if the OS is Linux and turning off Julia pre-compilation for PyJulia; ; fix for Issue https://github.com/blakeaw/GAlibrate/issues/14 
+
 ## [0.7.1] - 2024-07-23
 
 ### Fixed
